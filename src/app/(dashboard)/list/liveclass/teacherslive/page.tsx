@@ -52,12 +52,8 @@ export default function TeacherPage() {
     }
   };
 
-  // Debug log for token value and type
-  if (token) {
-    console.log("token", token, typeof token);
-  }
   return (
-    <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 p-4">
+    <main className="min-h-screen flex items-center justify-center p-4">
   <div className="w-full max-w-4xl bg-white/80 rounded-2xl shadow-xl p-6 md:p-10 flex flex-col items-stretch border border-white/40">
         <h1 className="text-3xl font-extrabold text-gray-800 mb-2 text-center drop-shadow">Teacher Live Class</h1>
         <p className="text-lg text-gray-600 mb-6 text-center">Start and manage your virtual classroom</p>

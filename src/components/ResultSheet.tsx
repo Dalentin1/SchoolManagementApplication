@@ -70,8 +70,8 @@ const generateDemoResults = (): DemoResultsType => {
 
 const demoResults: DemoResultsType = generateDemoResults();
 
-const ResultSheet = () => {
-  const [selectedClass, setSelectedClass] = useState("SS3");
+const ResultSheet = ({ studentName = "Faith Nnodu", initialClass = "SS3" }: { studentName?: string; initialClass?: string }) => {
+  const [selectedClass, setSelectedClass] = useState(initialClass);
   const [selectedTerm, setSelectedTerm] = useState("First Term");
 
   const results: ResultRow[] = demoResults[selectedClass]?.[selectedTerm] || [];
@@ -106,7 +106,7 @@ const ResultSheet = () => {
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
         <div className="flex flex-col sm:flex-row sm:items-center gap-2">
           <span className="font-semibold">Student Name:</span>
-          <span className="break-words">Faith Nnodu</span>
+          <span className="break-words">{studentName}</span>
         </div>
 
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 min-w-0">

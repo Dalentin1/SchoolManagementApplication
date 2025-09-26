@@ -1,6 +1,7 @@
 import Announcements from "@/components/Announcements"
 import BigCalendar from "@/components/BigCalendar"
 import EventCalendar from "@/components/EventCalendar"
+import ParentChildrenOverview from "@/components/ParentChildrenOverview"
 
 
 const ParentPage = () => {
@@ -12,10 +13,15 @@ const ParentPage = () => {
       {/* LEFT  CONTAINER*/}
       <div className=" w-full xl:W-2/3 ">
 
-       <div className="h-full bg-white p-4 rounded-md">
+       <div className="h-screen bg-white p-4 rounded-md">
          <h1 className=" text-xl font-semibold">Schedule (Joe Doe)</h1>
 
          <BigCalendar/>
+       </div>
+
+       {/* Children overview: for each child show timetable then results */}
+       <div className="mt-6">
+         <ParentChildrenOverview />
        </div>
 
 

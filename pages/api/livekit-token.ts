@@ -43,10 +43,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   });
 
   const token = await at.toJwt();
-  console.log('Generated token:', token, 'Type:', typeof token);
-  if (!token || typeof token !== 'string') {
-    console.error('Failed to generate LiveKit token. Check API key/secret and parameters.');
-    return res.status(500).json({ error: 'Failed to generate LiveKit token. Check server logs and credentials.' });
-  }
   res.status(200).json({ token });
 }

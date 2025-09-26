@@ -2,7 +2,8 @@
 
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import ReactDOM from 'react-dom';
 
 
 /* NEXT OPTIMIZATION*/
@@ -75,6 +76,21 @@ const FormModal = ( { table, type, data, id, }:{
   const bgcolor = type === "create" ? "bg-PatoYellow" : type === "update" ? "bg-PatoSky" : "bg-PatoPurple"
 
   const [ open, setOpen] = useState(false);
+  const portalRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    // create portal root when component mounts (client only)
+    const el = document.createElement('div');
+    el.setAttribute('data-form-modal-root', '');
+    portalRef.current = el;
+    document.body.appendChild(el);
+    return () => {
+      if (portalRef.current && portalRef.current.parentNode) {
+        portalRef.current.parentNode.removeChild(portalRef.current);
+      }
+      portalRef.current = null;
+    };
+  }, []);
 
   const Form = () => {
 
@@ -106,21 +122,22 @@ const FormModal = ( { table, type, data, id, }:{
 
       </button>
 
-      { open && 
-      <div className=" w-screen h-screen absolute left-0 top-0 bg-black bg-opacity-60 z-50 flex items-center justify-center del-bg ">
+      { open && portalRef.current && ReactDOM.createPortal(
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-60"
+        >
+          <div className="relative w-[95%] sm:w-[90%] md:w-[70%] lg:w-[60%] xl:w-[50%] 2xl:w-[40%] bg-white p-4 rounded-md max-h-[90vh] overflow-auto">
+            <Form />
 
-        <div className="bg-white p-4 rounded-md relative w-[90%] md:w-[70%] lg:w-[60%] xl:[50%] 2xl:w-[40%] mod-fx ">
-
-          <Form/>
-        
-          <div className="absolute top-4 right-4 cursor-pointer" onClick={ ()=> setOpen(false) }>
-          <Image src="/close.png" alt="" width={14} height={14} />
-        </div>
-
-        </div>
-
-
-      </div> }
+            <button aria-label="Close modal" className="absolute top-4 right-4" onClick={() => setOpen(false)}>
+              <Image src="/close.png" alt="Close" width={14} height={14} />
+            </button>
+          </div>
+        </div>,
+        portalRef.current
+      )}
 
     </>
   )

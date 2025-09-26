@@ -1,6 +1,7 @@
 import Announcements from "@/components/Announcements"
 import BigCalendar from "@/components/BigCalendar"
 import EventCalendar from "@/components/EventCalendar"
+import ResultSheet from "@/components/ResultSheet"
 
 
 const StudentPage = () => {
@@ -12,11 +13,19 @@ const StudentPage = () => {
       {/* LEFT  CONTAINER*/}
       <div className=" w-full xl:W-2/3 ">
 
-       <div className="h-full bg-white p-4 rounded-md">
+       <div className="bg-white p-4 rounded-md h-screen ">
          <h1 className=" text-xl font-semibold">Schedule (JSS1)</h1>
 
          <BigCalendar/>
+         
+         
+         
        </div>
+        
+        {/* Result Sheet for student */}
+        <div className="mt-12">
+          <ResultSheet />
+        </div>
 
 
       </div>

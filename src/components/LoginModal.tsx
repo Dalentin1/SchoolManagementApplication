@@ -1,7 +1,10 @@
 "use client"
 import React, { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
+import { setAuth } from "@/lib/auth"
 
+// Default demo passwords - kept here so the UI and auth logic share the same
+// values. In a production scenario these would be validated on the server.
 const DEFAULT_PASSWORDS: Record<string, string> = {
   admin: "admin1",
   teacher: "teacher1",
@@ -21,10 +24,11 @@ const LoginModal = ({ open = true }: { open?: boolean }) => {
     setIsOpen(open)
   }, [open])
 
+  // Simulate an async login call so the spinner is visible. Returns true when
+  // password === expected. This keeps the demo feeling realistic.
   const simulateLogin = (expected: string) => {
     setLoading(true)
     setError("")
-    // simulate async request (e.g., to backend) so loader is visible
     return new Promise<boolean>(resolve => {
       setTimeout(() => {
         const ok = password === expected
@@ -33,6 +37,9 @@ const LoginModal = ({ open = true }: { open?: boolean }) => {
     })
   }
 
+  // handleLogin: called when the form is submitted. On success we persist the
+  // demo auth (role) using setAuth and navigate to the appropriate dashboard.
+  // Detailed comments explain the flow for maintainers.
   const handleLogin = async (e?: React.FormEvent) => {
     e?.preventDefault()
     const expected = DEFAULT_PASSWORDS[role]
@@ -41,8 +48,17 @@ const LoginModal = ({ open = true }: { open?: boolean }) => {
     const ok = await simulateLogin(expected)
     setLoading(false)
     if (ok) {
+      // Persist demo auth so other components (Menu) can detect signed-in
+      // state and route users appropriately when they click Home.
+      try {
+        setAuth(role)
+      } catch (err) {
+        // ignore localStorage errors in the demo
+      }
+
       setIsOpen(false)
-      // small delay to let the UI update before navigation
+      // Small delay helps the modal disappear before navigation, avoiding
+      // janky transitions in the client router.
       setTimeout(() => {
         switch (role) {
           case "admin":
@@ -75,7 +91,7 @@ const LoginModal = ({ open = true }: { open?: boolean }) => {
             <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-gradient-to-br from-indigo-600 to-blue-400 flex items-center justify-center text-white text-lg font-bold">SS</div>
             <div className="flex-1">
               <h2 className="text-2xl font-semibold">Welcome back</h2>
-              <p className="text-sm text-gray-700">Sign in to access your dashboard. This is a demo: use the default passwords shown below.</p>
+              <p className="text-sm text-gray-700">Sign in to access your dashboard. This is a demo: ask programmer for default passwords</p>
             </div>
           </div>
 
@@ -111,30 +127,17 @@ const LoginModal = ({ open = true }: { open?: boolean }) => {
             </div>
           </form>
 
-          {/* <div className="mt-4 text-xs text-gray-600">
-            <div className="font-medium">Default passwords (demo)</div>
-            <div className="mt-2 grid grid-cols-2 gap-2 text-gray-700">
-              <div className="text-sm">Admin: <code className="bg-gray-100 px-2 py-0.5 rounded">admin1</code></div>
-              <div className="text-sm">Teacher: <code className="bg-gray-100 px-2 py-0.5 rounded">teacher1</code></div>
-              <div className="text-sm">Student: <code className="bg-gray-100 px-2 py-0.5 rounded">student1</code></div>
-              <div className="text-sm">Parent: <code className="bg-gray-100 px-2 py-0.5 rounded">parent1</code></div>
-            </div>
-          </div>*/}
-
         </div>
 
-        {/* COPYRIGHT CONTAINER */}
      <div className=" flex items-center justify-center mt-36 text-xs text-black-400 ">
        &copy; {new Date().getFullYear()} Smart Schooling All rights reserved. Developed by Patrick U. Nnodu
       </div>
 
-        {/* decorative bottom accent */}
         <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-[260px] h-6 rounded-t-full bg-gradient-to-r from-indigo-400 to-blue-300 opacity-30 blur-lg" aria-hidden />
       </div>
       
     </div>
 
-    
   )
 }
 

@@ -2,6 +2,7 @@ import FormModal from "@/components/FormModal";
 import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
+import ListHeader from "@/components/ListHeader";
 import { role, teachersData } from "@/lib/data";
 import Image from "next/image";
 import Link from "next/link";
@@ -109,44 +110,7 @@ const TeacherListPage = () => {
     /* MAIN TEACHER  CONTAINER*/
     <div className='bg-white p-4 rounded-md flex-1 m-4 mt-0 move-bx'>
     
-      {/* TOP  CONTAINER*/}
-      <div className=" flex items-center justify-between">
-
-        {/* HEADER*/}
-        <h1 className="hidden md:block text-lg font-semibold">
-          All Teachers
-        </h1>
-
-        <div className=" flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
-          <TableSearch/>
-
-          {/* BUTTON CONTAINER FOR LIST SEARCH TABLE */}
-          <div className=" flex items-center gap-4 self-end">
-
-            {/* Btn 1*/}
-            <button className=" w-8 h-8 flex items-center justify-center rounded-full bg-PatoYellow ">
-              <Image src= "/filter.png" alt="" width={14} height={14}/>
-            </button>
-
-            {/* Btn 2*/}
-            <button className=" w-8 h-8 flex items-center justify-center rounded-full bg-PatoYellow ">
-              <Image src= "/sort.png" alt="" width={14} height={14}/>
-            </button>
-
-            {/* Btn 3*/}
-            { role === "admin" && (
-              /* <button className=" w-8 h-8 flex items-center justify-center rounded-full bg-PatoYellow ">
-                  <Image src= "/plus.png" alt="" width={14} height={14}/>
-              </button> */
-
-              <FormModal table="teacher" type="create" id={0} />
-            )}
-
-          </div>
-
-        </div>
-
-      </div>
+      <ListHeader title="All Teachers" createTable={role === "admin" ? "teacher" : null} />
 
       {/* LIST  LINK */}
       <Table columns={columns} renderRow={renderRow} data={teachersData} />

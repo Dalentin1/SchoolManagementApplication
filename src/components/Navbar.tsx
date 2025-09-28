@@ -1,6 +1,20 @@
+"use client"
 import Image from "next/image"
+import { useEffect, useState } from "react"
+import { getRole } from "@/lib/auth"
 
 const Navbar = () => {
+  const [role, setRole] = useState<string | null>(() => getRole())
+
+  useEffect(() => {
+    const onAuthChange = () => setRole(getRole())
+    // listen for demo auth changes in the same tab
+    window.addEventListener("sma_auth_change", onAuthChange)
+    return () => window.removeEventListener("sma_auth_change", onAuthChange)
+  }, [])
+
+  const roleLabel = role ? `${role.charAt(0).toUpperCase()}${role.slice(1)}` : "Admin"
+
   return (
     /* NAVBAR CONTAINER */
     <div className=' flex items-center justify-between p-4 '>
@@ -45,7 +59,7 @@ const Navbar = () => {
         {/* USER NAME CONTAINER */}
         <div className=' flex flex-col'>
           <span className=' text-xs leading-3 font-medium'>Patrick</span>
-          <span className=' text-[10px] text-gray-500 text-right'>Admin</span>
+          <span className=' text-[10px] text-gray-500 text-right'>{roleLabel}</span>
         </div>
         
         {/* AVATAR IMAGE */}

@@ -1,7 +1,7 @@
 import Menu from "@/components/Menu";
 import Navbar from "@/components/Navbar";
 import Image from "next/image";
-import Link from "next/link";
+import LogoLink from "@/components/LogoLink";
 
 
 export default function DashboardLayout({
@@ -18,17 +18,7 @@ export default function DashboardLayout({
       <div className=' w-[14%] md:w-[8%] lg:w-[16%] xl:w-[14%] p-4 bg-white'>
         
         {/* LOGO  CONTAINER*/}
-        <Link 
-        href= "/" 
-        className=" flex items-center justify-center lg:justify-start gap-2 "
-        >
-          {/* LOGO  IMAGE */}
-          <Image src="/logo.png" alt="logo" width={32} height={32} />
-         
-          {/* LOGO  TEXT */}
-          <span className=" hidden lg:block font-bold ">SmartSchool</span>
-      
-        </Link>
+        <LogoLink />
 
        {/* MENU lIST*/}
         <Menu/>

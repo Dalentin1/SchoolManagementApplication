@@ -25,23 +25,25 @@ const LiveClass = () => {
             </h1>
           
 
-            <div className=" flex items-center justify-evenly mt-10 mb-9 ">
+            <div className="flex flex-col sm:flex-row items-center sm:justify-evenly gap-3 mt-10 mb-9 w-full">
 
-              <Link className=" flex items-center justify-center gap-2 px-6 py-3 bg-blue-400 text-white rounded-xl shadow hover:bg-blue-700 transition text-lg font-semibold focus:outline-none focus:ring-2 focus:ring-PatoSkyLight " href= "liveclass/teacherslive">
+              <Link className="w-full sm:w-auto max-w-xs flex items-center justify-center gap-2 px-6 py-3 bg-blue-400 text-white rounded-xl shadow hover:bg-blue-700 transition text-lg font-semibold focus:outline-none focus:ring-2 focus:ring-PatoSkyLight" href="liveclass/teacherslive">
 
-              <FaChalkboardTeacher className="text-2xl" /> Teacher
-              
-             </Link>
+                <FaChalkboardTeacher className="text-2xl" />
+                <span>Teacher</span>
 
-             <Link className=" flex items-center gap-2 px-6 py-3 bg-purple-400 text-white rounded-xl shadow hover:bg-purple-700 transition text-lg font-semibold focus:outline-none focus:ring-2 focus:ring-lightpurple " href= "liveclass/studentslive">
+              </Link>
 
-             <FaUserGraduate className="text-2xl" /> Student
-              
-             </Link>
+              <Link className="w-full sm:w-auto max-w-xs flex items-center justify-center gap-2 px-6 py-3 bg-purple-400 text-white rounded-xl shadow hover:bg-purple-700 transition text-lg font-semibold focus:outline-none focus:ring-2 focus:ring-lightpurple" href="liveclass/studentslive">
+
+                <FaUserGraduate className="text-2xl" />
+                <span>Student</span>
+
+              </Link>
 
             </div>
 
-            <div className=" mt-20 bg-white rounded-md p-4 h-[800px]">
+            <div className=" mt-20 bg-white rounded-md p-4 h-[400px] md:h-[800px] overflow-auto">
               <h1 className=" text-sm font-semibold text-gray-400 ">Extra Lesson&apos;s Schedule</h1>
               <BigCalendar/>
             </div>

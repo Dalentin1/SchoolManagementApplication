@@ -1,6 +1,14 @@
+import dynamic from "next/dynamic"
+
+const LoginModal = dynamic(() => import("@/components/LoginModal"), { ssr: false })
+
+
 const LoginPage = () => {
   return (
-    <div className=''>LoginPage</div>
+     <>
+      {/* LOGIN MODAL */}
+      <LoginModal />
+    </>
   )
 }
 

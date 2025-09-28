@@ -128,7 +128,11 @@ const menuItems = [
   },
 ];
 
-const Menu = () => {
+interface MenuProps {
+  showLabels?: boolean
+}
+
+const Menu: React.FC<MenuProps> = ({ showLabels = false }) => {
   const router = useRouter()
   const [currentRole, setCurrentRole] = useState<string | null>(null)
 
@@ -182,9 +186,9 @@ const Menu = () => {
                 }
 
                 return (
-                  <a key={item.label} onClick={handleHome} className=" flex items-center justify-center lg:justify-start gap-4 text-gray-500 py-2 md:px-2 rounded-md hover:bg-gray-100 transition-colors cursor-pointer" >
+                  <a key={item.label} onClick={handleHome} className={`flex items-center ${showLabels ? "justify-start" : "justify-center lg:justify-start"} gap-4 text-gray-500 py-2 md:px-2 rounded-md hover:bg-gray-100 transition-colors cursor-pointer`}>
                     <Image src={item.icon} alt="" width={20} height={20}/>
-                    <span className="hidden lg:block">{item.label}</span>
+                    <span className={showLabels ? "block" : "hidden lg:block"}>{item.label}</span>
                   </a>
                 )
               }
@@ -204,23 +208,23 @@ const Menu = () => {
                 }
 
                 return (
-                  <a key={item.label} onClick={handleLogout} className=" flex items-center justify-center lg:justify-start gap-4 text-gray-500 py-2 md:px-2 rounded-md hover:bg-gray-100 transition-colors cursor-pointer" >
+                  <a key={item.label} onClick={handleLogout} className={`flex items-center ${showLabels ? "justify-start" : "justify-center lg:justify-start"} gap-4 text-gray-500 py-2 md:px-2 rounded-md hover:bg-gray-100 transition-colors cursor-pointer`}>
                     <Image src={item.icon} alt="" width={20} height={20}/>
-                    <span className="hidden lg:block">{item.label}</span>
+                    <span className={showLabels ? "block" : "hidden lg:block"}>{item.label}</span>
                   </a>
                 )
               }
 
               // Default rendering for other menu items: use Link so Next can
               // prefetch and perform client navigation.
-              return (
+                return (
                 <Link 
                  href= { item.href }
                  key= { item.label }
-                 className=" flex items-center justify-center lg:justify-start gap-4 text-gray-500 py-2 md:px-2 rounded-md hover:bg-gray-100 transition-colors " 
+                 className={`flex items-center ${showLabels ? "justify-start" : "justify-center lg:justify-start"} gap-4 text-gray-500 py-2 md:px-2 rounded-md hover:bg-gray-100 transition-colors`} 
                 >
                   <Image src={item.icon} alt="" width={20} height={20}/>
-                  <span className="hidden lg:block">{item.label}</span>
+                  <span className={showLabels ? "block" : "hidden lg:block"}>{item.label}</span>
                 </Link>
               )
             };

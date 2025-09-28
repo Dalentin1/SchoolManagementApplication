@@ -273,7 +273,9 @@ height: 20px !important;
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    /* Use the light grey used in other variables so the app background
+       returns to the intended muted grey while cards/sidebars remain white. */
+    --background: 0 0% 96.1%;
     --foreground: 0 0% 3.9%;
     --card: 0 0% 100%;
     --card-foreground: 0 0% 3.9%;
@@ -329,9 +331,25 @@ height: 20px !important;
 
 @layer base {
   * {
-    @apply border-border;
+    /* Ensure default border color uses our CSS variable */
+    border-color: hsl(var(--border));
   }
+
   body {
-    @apply bg-background text-foreground;
+    /* Use CSS variables for background and foreground to avoid relying on
+       Tailwind utility names that may not exist during build-time. */
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
   }
+}
+
+/* Drawer animation used by MobileMenuDrawer */
+@keyframes slideInFromLeft {
+  from { transform: translateX(-100%); opacity: 0; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+
+.animate-drawer {
+  animation: slideInFromLeft 240ms cubic-bezier(.2,.8,.2,1) both;
 }

@@ -1,5 +1,6 @@
 "use client"
 import Image from 'next/image';
+import { FaEllipsisH } from 'react-icons/fa';
 import { RadialBarChart, RadialBar, Legend, ResponsiveContainer } from 'recharts';
 
  { /* RADIO CHART CODE */ }
@@ -30,7 +31,7 @@ const CountChart = () => {
       { /* TITLE AND MORE IMAGE ICON CONTAINER */ }
       <div className='flex justify-between items-center'>
         <h1 className=' text-lg font-semibold'>Students</h1>
-        <Image src="/moreDark.png" alt="" width={20} height={20} className='cursor-pointer'/>
+        < FaEllipsisH width={20} height={20} className='cursor-pointer text-gray-400'/>
       </div>
        
       { /* CHART CONTAINER*/ }

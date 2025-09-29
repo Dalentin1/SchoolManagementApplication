@@ -1,129 +1,47 @@
 "use client"
 import Link from "next/link";
-import Image from "next/image"
-import { role as demoRole } from "@/lib/data";
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { getRole, isAuthenticated, clearAuth } from "@/lib/auth"
+import { role as demoRole } from "@/lib/data"
+import { IconType } from "react-icons"
+import { FaChalkboardTeacher, FaUserGraduate, FaUsers, FaBook, FaLayerGroup, FaClipboard, FaFileAlt, FaClipboardList, FaChartBar, FaCheckSquare as FaCheckSquareFA, FaCalendarAlt, FaEnvelope, FaBullhorn, FaVideo, FaUser, FaHome, FaCog, FaSignOutAlt } from 'react-icons/fa'
 
 /* MENU ITEM STRUCTURE */
-const menuItems = [
+type MenuItem = {
+  icon?: IconType
+  label: string
+  href: string
+  visible: string[]
+}
+
+const menuItems: { title: string; items: MenuItem[] }[] = [
   {
     title: "MENU",
     items: [
-      {
-        icon: "/home.png",
-        label: "Home",
-        href: "/",
-        visible: ["admin", "teacher", "student", "parent"],
-      },
-      {
-        icon: "/teacher.png",
-        label: "Teachers",
-        href: "/list/teachers",
-        visible: ["admin", "teacher"],
-      },
-      {
-        icon: "/student.png",
-        label: "Students",
-        href: "/list/students",
-        visible: ["admin", "teacher"],
-      },
-      {
-        icon: "/parent.png",
-        label: "Parents",
-        href: "/list/parents",
-        visible: ["admin", "teacher"],
-      },
-      {
-        icon: "/subject.png",
-        label: "Subjects",
-        href: "/list/subjects",
-        visible: ["admin"],
-      },
-      {
-        icon: "/class.png",
-        label: "Classes",
-        href: "/list/classes",
-        visible: ["admin", "teacher"],
-      },
-      {
-        icon: "/lesson.png",
-        label: "Lessons",
-        href: "/list/lessons",
-        visible: ["admin", "teacher"],
-      },
-      {
-        icon: "/exam.png",
-        label: "Exams",
-        href: "/list/exams",
-        visible: ["admin", "teacher", "student", "parent"],
-      },
-      {
-        icon: "/assignment.png",
-        label: "Assignments",
-        href: "/list/assignments",
-        visible: ["admin", "teacher", "student", "parent"],
-      },
-      {
-        icon: "/result.png",
-        label: "Results",
-        href: "/list/results",
-        visible: ["admin", "teacher", "student", "parent"],
-      },
-      {
-        icon: "/attendance.png",
-        label: "Attendance",
-        href: "/list/attendance",
-        visible: ["admin", "teacher", "student", "parent"],
-      },
-      {
-        icon: "/calendar.png",
-        label: "Events",
-        href: "/list/events",
-        visible: ["admin", "teacher", "student", "parent"],
-      },
-      {
-        icon: "/message.png",
-        label: "Messages",
-        href: "/list/messages",
-        visible: ["admin", "teacher", "student", "parent"],
-      },
-      {
-        icon: "/announcement.png",
-        label: "Announcements",
-        href: "/list/announcements",
-        visible: ["admin", "teacher", "student", "parent"],
-      },
-      {
-        icon: "/Live.png",
-        label: "Live Class",
-        href: "/list/liveclass",
-        visible: ["admin", "teacher", "student", "parent"],
-      },
+      { icon: FaHome, label: "Home", href: "/", visible: ["admin", "teacher", "student", "parent"] },
+      { icon: FaChalkboardTeacher, label: "Teachers", href: "/list/teachers", visible: ["admin", "teacher"] },
+      { icon: FaUserGraduate, label: "Students", href: "/list/students", visible: ["admin", "teacher"] },
+      { icon: FaUsers, label: "Parents", href: "/list/parents", visible: ["admin", "teacher"] },
+      { icon: FaBook, label: "Subjects", href: "/list/subjects", visible: ["admin"] },
+      { icon: FaLayerGroup, label: "Classes", href: "/list/classes", visible: ["admin", "teacher"] },
+      { icon: FaClipboard, label: "Lessons", href: "/list/lessons", visible: ["admin", "teacher"] },
+      { icon: FaFileAlt, label: "Exams", href: "/list/exams", visible: ["admin", "teacher", "student", "parent"] },
+      { icon: FaClipboardList, label: "Assignments", href: "/list/assignments", visible: ["admin", "teacher", "student", "parent"] },
+      { icon: FaChartBar, label: "Results", href: "/list/results", visible: ["admin", "teacher", "student", "parent"] },
+      { icon: FaCheckSquareFA, label: "Attendance", href: "/list/attendance", visible: ["admin", "teacher", "student", "parent"] },
+      { icon: FaCalendarAlt, label: "Events", href: "/list/events", visible: ["admin", "teacher", "student", "parent"] },
+      { icon: FaEnvelope, label: "Messages", href: "/list/messages", visible: ["admin", "teacher", "student", "parent"] },
+      { icon: FaBullhorn, label: "Announcements", href: "/list/announcements", visible: ["admin", "teacher", "student", "parent"] },
+      { icon: FaVideo, label: "Live Class", href: "/list/liveclass", visible: ["admin", "teacher", "student", "parent"] },
     ],
   },
   {
     title: "OTHER",
     items: [
-      {
-        icon: "/profile.png",
-        label: "Profile",
-        href: "/profile",
-        visible: ["admin", "teacher", "student", "parent"],
-      },
-      {
-        icon: "/setting.png",
-        label: "Settings",
-        href: "/settings",
-        visible: ["admin", "teacher", "student", "parent"],
-      },
-      {
-        icon: "/logout.png",
-        label: "Logout",
-        href: "/logout",
-        visible: ["admin", "teacher", "student", "parent"],
-      },
+      { icon: FaUser, label: "Profile", href: "/profile", visible: ["admin", "teacher", "student", "parent"] },
+      { icon: FaCog, label: "Settings", href: "/settings", visible: ["admin", "teacher", "student", "parent"] },
+      { icon: FaSignOutAlt, label: "Logout", href: "/logout", visible: ["admin", "teacher", "student", "parent"] },
     ],
   },
 ];
@@ -187,7 +105,7 @@ const Menu: React.FC<MenuProps> = ({ showLabels = false }) => {
 
                 return (
                   <a key={item.label} onClick={handleHome} className={`flex items-center ${showLabels ? "justify-start" : "justify-center lg:justify-start"} gap-4 text-gray-500 py-2 md:px-2 rounded-md hover:bg-gray-100 transition-colors cursor-pointer`}>
-                    <Image src={item.icon} alt="" width={20} height={20}/>
+                    {item.icon ? <item.icon size={20} /> : null}
                     <span className={showLabels ? "block" : "hidden lg:block"}>{item.label}</span>
                   </a>
                 )
@@ -209,7 +127,7 @@ const Menu: React.FC<MenuProps> = ({ showLabels = false }) => {
 
                 return (
                   <a key={item.label} onClick={handleLogout} className={`flex items-center ${showLabels ? "justify-start" : "justify-center lg:justify-start"} gap-4 text-gray-500 py-2 md:px-2 rounded-md hover:bg-gray-100 transition-colors cursor-pointer`}>
-                    <Image src={item.icon} alt="" width={20} height={20}/>
+                    {item.icon ? <item.icon size={20} /> : null}
                     <span className={showLabels ? "block" : "hidden lg:block"}>{item.label}</span>
                   </a>
                 )
@@ -223,7 +141,7 @@ const Menu: React.FC<MenuProps> = ({ showLabels = false }) => {
                  key= { item.label }
                  className={`flex items-center ${showLabels ? "justify-start" : "justify-center lg:justify-start"} gap-4 text-gray-500 py-2 md:px-2 rounded-md hover:bg-gray-100 transition-colors`} 
                 >
-                  <Image src={item.icon} alt="" width={20} height={20}/>
+                  {item.icon ? <item.icon size={20} /> : null}
                   <span className={showLabels ? "block" : "hidden lg:block"}>{item.label}</span>
                 </Link>
               )

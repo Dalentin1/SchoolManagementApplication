@@ -1,5 +1,5 @@
 "use client"
-import Image from 'next/image';
+import { FaEllipsisH } from 'react-icons/fa';
 import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 { /* BAR CHART CODE */ }
@@ -43,7 +43,7 @@ const AttendanceChart = () => {
         <h1 className=' text-lg font-semibold' >Attendance </h1>
 
         { /* ICON IMAGE */ }
-        <Image src="/moreDark.png" alt="" width={20} height={20} className='cursor-pointer'/>
+        < FaEllipsisH width={20} height={20} className='cursor-pointer text-gray-400'/>
 
       </div>
 

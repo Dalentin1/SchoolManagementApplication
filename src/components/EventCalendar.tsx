@@ -1,8 +1,8 @@
 "use client"
-import Image from "next/image";
 import { useState } from "react"; 
 import Calendar from "react-calendar";
 import 'react-calendar/dist/Calendar.css';
+import { FaEllipsisH } from "react-icons/fa";
 
 type ValuePiece = Date | null;
 
@@ -50,7 +50,7 @@ const [value, onChange] = useState<Value>(new Date());
         <h1 className=' text-lg font-semibold'>Events</h1>
 
         { /* MORE ICON */ }
-        <Image src="/moreDark.png" alt="" width={20} height={20} className='cursor-pointer'/>
+        < FaEllipsisH width={20} height={20} className='cursor-pointer text-gray-400'/>
       
       </div>
 

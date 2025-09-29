@@ -6,6 +6,7 @@ import ListHeader from "@/components/ListHeader";
 import { role, teachersData } from "@/lib/data";
 import Image from "next/image";
 import Link from "next/link";
+import { FaEye } from "react-icons/fa";
 
 {/* TEMPOARY DATA TYPE FOR TEACHER */}
  type Teacher = {
@@ -78,9 +79,9 @@ const TeacherListPage = () => {
        <div className="flex items-center gap-2">
           <Link href={`/list/teachers/${item.id}`}>
             
-            <button className=" w-7 h-7 flex items-center justify-center rounded-full bg-PatoSky ">
+            <button className=" w-7 h-7 flex items-center justify-center rounded-full hover:bg-PatoSky ">
 
-              <Image src="/view.png" alt="" width={16} height={16}/>
+              < FaEye width={16} height={16}/>
 
             </button>
 

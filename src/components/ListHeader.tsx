@@ -1,8 +1,8 @@
 "use client"
 import React from "react"
 import TableSearch from "@/components/TableSearch"
-import Image from "next/image"
 import FormModal from "@/components/FormModal"
+import { FaFilter, FaSortAlphaUp } from "react-icons/fa"
 
 type Props = {
   title: string
@@ -47,11 +47,11 @@ const ListHeader: React.FC<Props> = ({ title, createTable = null }) => {
 
         <div className="flex items-center gap-3 sm:ml-2">
           <button className=" w-8 h-8 flex items-center justify-center rounded-full bg-PatoYellow ">
-            <Image src="/filter.png" alt="Filter" width={14} height={14} />
+              < FaFilter className="text-gray-600" size={14} />
           </button>
 
           <button className=" w-8 h-8 flex items-center justify-center rounded-full bg-PatoYellow ">
-            <Image src="/sort.png" alt="Sort" width={14} height={14} />
+              < FaSortAlphaUp className="text-gray-600" size={14} />
           </button>
 
           {createTable && (

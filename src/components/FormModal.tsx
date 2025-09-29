@@ -1,9 +1,9 @@
-'use client'
+ 'use client'
 
 import dynamic from "next/dynamic";
-import Image from "next/image";
 import React, { useState, useEffect, useRef } from "react";
 import ReactDOM from 'react-dom';
+import { FaEdit, FaPlus, FaTimes, FaTrash } from "react-icons/fa";
 
 
 /* NEXT OPTIMIZATION*/
@@ -73,7 +73,7 @@ const FormModal = ( { table, type, data, id, }:{
 } ) => {
   const size = type === "create" ? "w-8 h-8" : "w-7 h-7"
 
-  const bgcolor = type === "create" ? "bg-PatoYellow" : type === "update" ? "bg-PatoSky" : "bg-PatoPurple"
+  const bgcolor = type === "create" ? "bg-PatoYellow" : type === "update" ? "hover:bg-PatoSky" : "hover:bg-red-500"
 
   const [ open, setOpen] = useState(false);
   const portalRef = useRef<HTMLDivElement | null>(null);
@@ -117,9 +117,7 @@ const FormModal = ( { table, type, data, id, }:{
        }
          onClick = { ()=> setOpen(true)}
       >
-
-        <Image src={`/${type}.png `} alt="" width={16} height={16} />
-
+        {type === 'create' ? < FaPlus size={16} /> : type === 'update' ? < FaEdit size={16} /> : < FaTrash size={16} />}
       </button>
 
       { open && portalRef.current && ReactDOM.createPortal(
@@ -131,8 +129,8 @@ const FormModal = ( { table, type, data, id, }:{
           <div className="relative w-[95%] sm:w-[90%] md:w-[70%] lg:w-[60%] xl:w-[50%] 2xl:w-[40%] bg-white p-4 rounded-md max-h-[90vh] overflow-auto">
             <Form />
 
-            <button aria-label="Close modal" className="absolute top-4 right-4" onClick={() => setOpen(false)}>
-              <Image src="/close.png" alt="Close" width={14} height={14} />
+            <button aria-label="Close modal" className="absolute top-4 right-4 " onClick={() => setOpen(false)}>
+              < FaTimes size={18} />
             </button>
           </div>
         </div>,

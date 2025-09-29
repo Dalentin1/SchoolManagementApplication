@@ -1,4 +1,4 @@
-import Image from "next/image"
+import { FaEllipsisH } from "react-icons/fa";
 
 const UserCard = ( {type}:{type:string} ) => {
   return (
@@ -13,7 +13,7 @@ const UserCard = ( {type}:{type:string} ) => {
         </span>
         
         { /* MORE IMAGE ICON */ }
-       <Image src="/more.png " alt="" width={20} height={20} className="cursor-pointer" />
+       < FaEllipsisH width={20} height={20} className="cursor-pointer text-white hover:text-gray-500 " />
 
       </div>
       

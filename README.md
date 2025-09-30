@@ -1,4 +1,4 @@
-# Pato Dev School Management Application
+# Smart School Management Application
 
 ## Getting Started
 

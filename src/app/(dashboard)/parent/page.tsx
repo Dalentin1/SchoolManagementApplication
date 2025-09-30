@@ -19,7 +19,7 @@ const ParentPage = () => {
          <BigCalendar/>
        </div>
 
-       {/* Children overview: for each child show timetable then results */}
+       {/* Children overview: for each child show results */}
        <div className="mt-6">
          <ParentChildrenOverview />
        </div>

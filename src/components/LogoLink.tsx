@@ -26,8 +26,7 @@ const LogoLink: React.FC = () => {
   }
 
   return (
-    // keep structure visually identical to the old Link. Use a button-like
-    // anchor to allow client-side navigation logic.
+    //  I used a button-like anchor to allow client-side navigation logic.
     <a onClick={handleClick} className=" flex items-center justify-center lg:justify-start gap-2 cursor-pointer" aria-label="SmartSchool home">
       <Image src="/logo.png" alt="logo" width={32} height={32} />
       <span className=" hidden lg:block font-bold ">SmartSchool</span>

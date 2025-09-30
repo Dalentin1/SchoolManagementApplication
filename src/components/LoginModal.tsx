@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { setAuth } from "@/lib/auth"
 
-// Default demo passwords - kept here so the UI and auth logic share the same
+// Default demo passwords - I kept it here, so the UI and auth logic share the same
 // values. In a production scenario these would be validated on the server.
 const DEFAULT_PASSWORDS: Record<string, string> = {
   admin: "admin1",
@@ -25,7 +25,7 @@ const LoginModal = ({ open = true }: { open?: boolean }) => {
   }, [open])
 
   // Simulate an async login call so the spinner is visible. Returns true when
-  // password === expected. This keeps the demo feeling realistic.
+  // password === expected. I made this to keep the demo feeling realistic.
   const simulateLogin = (expected: string) => {
     setLoading(true)
     setError("")
@@ -53,11 +53,11 @@ const LoginModal = ({ open = true }: { open?: boolean }) => {
       try {
         setAuth(role)
       } catch (err) {
-        // ignore localStorage errors in the demo
+        // I ignored localStorage errors in the demo
       }
 
       setIsOpen(false)
-      // Small delay helps the modal disappear before navigation, avoiding
+      // I made a small delay, it helps the modal disappear before navigation, avoiding
       // janky transitions in the client router.
       setTimeout(() => {
         switch (role) {

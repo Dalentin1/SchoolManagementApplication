@@ -26,7 +26,7 @@ const SingleTeacherPage = () => {
             {/* TEACHER INFO CONTAINER  */}
             <div className="w-2/3 flex flex-col justify-between gap-4">
 
-              {/* TEACHER NAME ANF FORM CONTAINER */}
+              {/* TEACHER NAME AND FORM CONTAINER */}
              <div className="flex items-center gap-4">
 
                 {/* TEACHER NAME */}

@@ -267,13 +267,10 @@ height: 20px !important;
 
 }
 
-  
-  
-
 
 @layer base {
   :root {
-    /* Use the light grey used in other variables so the app background
+    /* Used the light grey used in other variables so the app background
        returns to the intended muted grey while cards/sidebars remain white. */
     --background: 0 0% 96.1%;
     --foreground: 0 0% 3.9%;

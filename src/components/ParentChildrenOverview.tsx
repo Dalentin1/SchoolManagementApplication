@@ -7,12 +7,12 @@ import { parentsData, studentsData } from "@/lib/data"
 // a stacked view that for each child shows that child's timetable (by class)
 // followed by the child's results.
 const ParentChildrenOverview = ({ parentId }: { parentId?: number }) => {
-  // Under-spec: using parentsData (demo) to lookup children names. In a real
-  // app you'd fetch the logged-in parent's data and children list.
+  // Under-spec: using parentsData (demo) to lookup children names. In production
+  // app I'd fetch the logged-in parent's data and children list.
   const parent = parentsData.find(p => p.id === (parentId ?? parentsData[0].id)) || parentsData[0];
 
   // Try to map child names to student objects from studentsData; fall back to
-  // the name if we don't find a matching student record.
+  // the name if the code doesn't find a matching student record.
   const children = parent.students.map((childName: string) => {
     const student = studentsData.find(s => s.name === childName);
     return student || { name: childName, class: "Unknown" };

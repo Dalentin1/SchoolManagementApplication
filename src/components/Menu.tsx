@@ -81,12 +81,12 @@ const Menu: React.FC<MenuProps> = ({ showLabels = false }) => {
           { i.items.map((item) => {
 
             // check the static demo role from data.ts first, if it matches
-            // the visible list. We then further allow the persisted current
+            // the visible list. I then further allow the persisted current
             // auth role (from localStorage via getRole()) to affect Home and
             // Logout behavior at click-time.
             if(item.visible.includes(demoRole)) {
 
-              // Special-case "Home": when the user is signed in we don't
+              // Special-case "Home": when the user is signed in I don't
               // want to navigate back to the public home page ("/"), which
               // in the prior implementation could act like a sign-out or
               // remove the current context. Instead, route the user to the
@@ -112,7 +112,7 @@ const Menu: React.FC<MenuProps> = ({ showLabels = false }) => {
               }
 
               // Special-case "Logout": call clearAuth() and navigate to the
-              // sign-in page. We intentionally use an anchor-like element with
+              // sign-in page. I intentionally use an anchor-like element with
               // an onClick handler because Logout must run client-side and
               // cannot be expressed as a plain Link href.
               if (item.label === "Logout") {
@@ -133,7 +133,7 @@ const Menu: React.FC<MenuProps> = ({ showLabels = false }) => {
                 )
               }
 
-              // Default rendering for other menu items: use Link so Next can
+              // Default rendering for other menu items: I used Link so Next can
               // prefetch and perform client navigation.
                 return (
                 <Link 

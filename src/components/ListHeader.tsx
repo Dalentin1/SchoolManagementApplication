@@ -25,7 +25,7 @@ type Props = {
 /**
  * ListHeader
  * A reusable responsive header used by list pages.
- * Layout behavior (matches screenshot at small widths):
+ * Layout behavior:
  * - Title on the left (stacks above the controls on small screens)
  * - Search input next to title on larger screens; full-width on small screens
  * - Action buttons (filter, sort, create) appear to the right on larger

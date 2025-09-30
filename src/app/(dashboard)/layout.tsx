@@ -1,6 +1,8 @@
 import Menu from "@/components/Menu";
 import LogoLink from "@/components/LogoLink";
 import DashboardShell from "@/components/DashboardShell";
+import { Analytics } from '@vercel/analytics/next';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -16,6 +18,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <DashboardShell>
         {children}
       </DashboardShell>
+
+      <Analytics />
+      <SpeedInsights />
     </div>
   )
 }

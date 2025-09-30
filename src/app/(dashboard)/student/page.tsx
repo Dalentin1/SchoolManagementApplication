@@ -14,12 +14,9 @@ const StudentPage = () => {
       <div className=" w-full xl:W-2/3 ">
 
        <div className="bg-white p-4 rounded-md h-screen ">
-         <h1 className=" text-xl font-semibold">Schedule (JSS1)</h1>
+          <h1 className=" text-xl font-semibold">Schedule (JSS1)</h1>
 
-         <BigCalendar/>
-         
-         
-         
+          <BigCalendar/>
        </div>
         
         {/* Result Sheet for student */}

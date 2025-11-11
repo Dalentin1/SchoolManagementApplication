@@ -7,7 +7,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Pato Smart Schooling Management Dashboard",
+  title: "Pato Smart Schooling Management Web-Application",
   description: "Next.js School Management System",
   authors: [{ name:"Patrick Nnodu", url:"https://github.com/Dalentin1" }],
   applicationName: "Smart Schooling Management Application",
@@ -22,7 +22,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className }>{children}</body>
+
+      <body className={inter.className }>
+        {children}
+        <Analytics />
+       <SpeedInsights />
+      </body>
+
     </html>
   );
 }
+

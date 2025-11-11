@@ -23,3 +23,23 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 To learn more about Next.js, take a look at the following resources:
 
 - [Next.js](https://nextjs.org/learn)# SchoolManagementApplication
+
+## Seeding the database (idempotent)
+
+This project includes an idempotent TypeScript seed script that safely inserts initial data and can be re-run without creating duplicate rows.
+
+- How it works:
+  - Bulk inserts use `createMany(..., { skipDuplicates: true })` for speed and idempotency.
+  - Lookup records (grades, classes, subjects, teachers, parents, students) are inserted in bulk.
+  - Transient records (lessons, exams, assignments, results, attendance, events, announcements) are recreated on each run.
+
+- Run the seed (works across shells including PowerShell on Windows):
+
+```powershell
+npm run seed
+```
+
+- Notes:
+  - The script uses `prisma/seed-runner.js` to register `ts-node` with compatible compiler options on Windows.
+  - The seed relies on your `DATABASE_URL` in `.env`. Make sure it points to a reachable database before running.
+  - For heavy seeding it's faster and more reliable to use a local Postgres instance (update `.env` to point to your local DB).

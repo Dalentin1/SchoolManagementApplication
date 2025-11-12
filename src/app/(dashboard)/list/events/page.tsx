@@ -130,7 +130,7 @@ const EventListPage = () => {
 
 
       {/* PAGINATION  LINK */}
-      <Pagination/>
+      <Pagination page={1} count={eventsData.length}/>
 
   </div>
   );

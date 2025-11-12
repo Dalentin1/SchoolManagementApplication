@@ -114,7 +114,7 @@ const ParentListPage = () => {
  
 
       {/* PAGINATION  LINK */}
-      <Pagination/>
+      <Pagination page={1} count={10}/>
 
   </div>
   );

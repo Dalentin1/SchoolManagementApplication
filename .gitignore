@@ -38,3 +38,31 @@ next-env.d.ts
 
 # Prisma
 /src/generated/prisma
+
+# Recommended: IDE/editor dirs
+.vscode/
+.idea/
+
+# Local env files (ignore any env.* but keep examples)
+.env.*
+!.env.example
+
+# Local npm/auth files
+.npmrc
+.netrc
+
+# Cloud/service account keys
+serviceAccountKey*.json
+google-service-account*.json
+
+# SSH/private keys and certs
+id_rsa
+id_rsa.pub
+*.key
+*.crt
+*.csr
+*.p12
+*.pfx
+
+# AWS credentials
+.aws/credentials

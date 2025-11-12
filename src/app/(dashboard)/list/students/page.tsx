@@ -52,8 +52,8 @@ const renderRow = (item: StudentList) => [
   >
     <td className=" flex items-center gap-4 p-4">
       <Image
-        src={item.img || '/Avatar.png'}
-        alt={item.img || '/Avatar.png'}
+        src={item.img ?? "/avatar.png"}
+        alt={`${item.name} avatar`}
         width={40}
         height={40}
         className=" md:hidden xl:block w-10 h-10 rounded-full object-cover"

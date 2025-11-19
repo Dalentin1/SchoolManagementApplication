@@ -24,9 +24,15 @@ export default function RootLayout({
     <html lang="en">
 
       <body className={inter.className }>
+
+        {/* Prevent flash of wrong theme by applying stored preference before React hydrates */}
+
+        <script dangerouslySetInnerHTML={{ __html: `(function(){try{var t=localStorage.getItem('sma_theme');if(t==='dark'){document.documentElement.classList.add('dark')}else{document.documentElement.classList.remove('dark')}}catch(e){}})()` }} />
+
         {children}
         <Analytics />
        <SpeedInsights />
+       
       </body>
 
     </html>

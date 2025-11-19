@@ -12,7 +12,7 @@ const Performance = () => {
   return (
 
     /* PERFORMANCE MAIN COMTAINER*/
-    <div className=' bg-white p-4 rounded-md h-80 relative'>
+    <div className=' bg-white bg-dark-2 p-4 rounded-md h-80 relative'>
 
       {/* TEXT AND ICON COMTAINER*/}
       <div className="flex items-center justify-between">

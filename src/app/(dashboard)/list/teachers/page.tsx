@@ -116,7 +116,7 @@ const TeacherListPage = async ({
 
   // URL PARAMS CONDITION
 
-  const query: Prisma.TeacherWhereInput  = {};
+  const query: Prisma.TeacherWhereInput = {};
 
   if (queryParams) {
     for (const [key, value] of Object.entries(queryParams)) {
@@ -126,15 +126,14 @@ const TeacherListPage = async ({
             query.lessons = {
               some: {
                 classId: parseInt(value),
-              }
-            }
+              },
+            };
             break;
           case "search":
             query.name = {
               contains: value,
               mode: "insensitive",
-            }
-
+            };
         }
       }
     }
@@ -156,7 +155,7 @@ const TeacherListPage = async ({
 
   return (
     /* MAIN TEACHER  CONTAINER*/
-    <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0 move-bx">
+    <div className="bg-white bg-dark-2 p-4 rounded-md dark:rounded-3xl  flex-1 m-4 mt-0 move-bx">
       <ListHeader
         title="All Teachers"
         createTable={role === "admin" ? "teacher" : null}

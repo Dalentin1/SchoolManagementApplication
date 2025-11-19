@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "seed": "node prisma/seed-runner.js",
-  "seed:counts": "node prisma/seed-counts.js"
+    "seed:counts": "node prisma/seed-counts.js"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.7",

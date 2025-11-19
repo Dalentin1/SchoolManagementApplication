@@ -2,7 +2,6 @@
 import React, { useEffect } from "react"
 import Image from "next/image"
 import Menu from "@/components/Menu"
-import LogoLink from "@/components/LogoLink"
 
 interface Props {
   open: boolean

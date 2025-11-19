@@ -69,7 +69,7 @@ const data = [
 const FinanceChart = () => {
   return (
     /* FINANCE CHART */ 
-    <div className='bg-white rounded-xl w-full h-full p-4'>
+    <div className='bg-white rounded-2xl dark:rounded-3xl w-full h-full p-4 bg-dark '>
       
       { /* TITLE AND MORE-IMAGE ICON CONTAINER */ }
       <div className='flex justify-between items-center '>

@@ -12,7 +12,7 @@ const Table = ({
   return (
       
     /* TABLE */
-    <table className=' w-full mt-4'>
+    <table className=' w-full mt-6'>
      
       {/* TABLE HEAD */}
       <thead>

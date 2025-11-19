@@ -100,7 +100,7 @@ const ResultSheet = ({ studentName = "Faith Nnodu", initialClass = "SS3" }: { st
   }, [selectedClass, selectedTerm]);
 
   return (
-    <div className="bg-white rounded-md p-4 md:p-6 shadow w-full">
+    <div className="bg-white bg-dark-2 rounded-md dark:rounded-3xl p-4 md:p-6 shadow w-full">
       <h2 className="text-lg md:text-xl font-bold mb-3 md:mb-4">Academic Result Sheet</h2>
 
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
@@ -115,7 +115,7 @@ const ResultSheet = ({ studentName = "Faith Nnodu", initialClass = "SS3" }: { st
             <select
               value={selectedClass}
               onChange={e => setSelectedClass(e.target.value)}
-              className="border rounded px-2 py-1 text-sm min-w-0 w-full sm:w-auto"
+              className="border rounded px-2 py-1 text-sm min-w-0 w-full sm:w-auto border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-50 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 transition"
             >
               {classes.map(cls => <option key={cls} value={cls}>{cls}</option>)}
             </select>
@@ -125,7 +125,7 @@ const ResultSheet = ({ studentName = "Faith Nnodu", initialClass = "SS3" }: { st
             <select
               value={selectedTerm}
               onChange={e => setSelectedTerm(e.target.value)}
-              className="border rounded px-2 py-1 text-sm min-w-0 w-full sm:w-auto"
+              className="border rounded px-2 py-1 text-sm min-w-0 w-full sm:w-auto border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-50 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 transition "
             >
               {terms.map(term => <option key={term} value={term}>{term}</option>)}
             </select>

@@ -62,7 +62,7 @@ export default function StudentPage() {
         <form onSubmit={e => { e.preventDefault(); handlePaystack(); }} className="flex flex-col gap-4 w-full max-w-sm">
           <label className="font-semibold">Select Mock Student:</label>
           <select
-            className="border p-2 rounded"
+            className="p-2 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-50 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
             value={name + "|" + room + "|" + email}
             onChange={e => {
               const [n, r, em] = e.target.value.split("|");
@@ -80,7 +80,7 @@ export default function StudentPage() {
             placeholder="Your Name"
             value={name}
             onChange={e => setName(e.target.value)}
-            className="border p-2 rounded"
+            className=" p-2 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-50 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition "
             required
           />
           <input
@@ -88,13 +88,13 @@ export default function StudentPage() {
             placeholder="Class/Room Name"
             value={room}
             onChange={e => setRoom(e.target.value)}
-            className="border p-2 rounded"
+            className="p-2 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-50 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
             required
           />
           <input
             type="email"
             placeholder="Your Email"
-            className="border p-2 rounded"
+            className="p-2 w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-50 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
             required
             id="paystack-email"
             value={email}

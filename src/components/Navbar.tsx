@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react"
 import { getRole } from "@/lib/auth"
 import { FaBell, FaEnvelope, FaSearch, FaUser } from "react-icons/fa"
+import ThemeToggle from "./ThemeToggle"
 
 interface NavbarProps {
   onMenuClick?: () => void
@@ -41,16 +42,25 @@ const Navbar: React.FC<NavbarProps> = ({ onMenuClick }) => {
       </div>
 
       {/* USER AND ICONS MAIN CONTAINER */}
-      <div className="flex items-center gap-6 justify-end w-full">
-        <div className="bg-white rounded-full w-7 h-7 flex items-center justify-center cursor-pointer">
+      <div className="flex items-center gap-6 justify-end w-full ">
+
+        <div 
+        className="bg-white rounded-full w-7 h-7 flex items-center justify-center cursor-pointer bd-cl"
+        title="Messages"
+        >
           < FaEnvelope className="text-gray-600" size={18} />
         </div>
 
 
-        <div className="bg-white rounded-full w-7 h-7 flex items-center justify-center cursor-pointer relative">
+        <div 
+        className="bg-white rounded-full w-7 h-7 flex items-center justify-center cursor-pointer relative bd-cl "
+        title="Notifications"
+        >
           < FaBell className="text-gray-600" size={18} />
           <div className="absolute -top-3 -right-3 w-5 h-5 flex items-center justify-center bg-purple-500 text-white rounded-full text-xs">1</div>
         </div>
+
+        <ThemeToggle />
 
 
         <div className="flex flex-col">
@@ -59,7 +69,10 @@ const Navbar: React.FC<NavbarProps> = ({ onMenuClick }) => {
         </div>
 
         {/* USER AVATAR */}
-        <div className="bg-white rounded-full w-9 h-9 flex items-center justify-center cursor-pointer">
+        <div 
+        className="bg-white rounded-full w-9 h-9 flex items-center justify-center cursor-pointer bd-cl "
+        title="Profile"
+        >
         < FaUser width={36} height={36} className="rounded-full" />
         </div>
 

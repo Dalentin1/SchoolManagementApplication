@@ -54,46 +54,61 @@ export default function TeacherPage() {
 
   return (
     <main className="min-h-screen flex items-center justify-center p-4">
-  <div className="w-full max-w-4xl bg-white/80 rounded-2xl shadow-xl p-6 md:p-10 flex flex-col items-stretch border border-white/40">
-        <h1 className="text-3xl font-extrabold text-gray-800 mb-2 text-center drop-shadow">Teacher Live Class</h1>
-        <p className="text-lg text-gray-600 mb-6 text-center">Start and manage your virtual classroom</p>
+  <div className="w-full max-w-5xl bg-card dark:bg-card rounded-3xl shadow-lg p-8 md:p-12 flex flex-col items-stretch border border-gray-200 dark:border-gray-700 bg-dark-2 ">
+        <div className="mb-8 text-center">
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-50 mb-2">Teacher Live Class</h1>
+          <p className="text-base text-gray-600 dark:text-gray-300">Start and manage your virtual classroom session</p>
+        </div>
         {!token ? (
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full max-w-md mx-auto">
-          <label className="font-semibold">Select Mock Teacher:</label>
-          <select
-            className="border p-2 rounded"
-            value={name + "|" + room}
-            onChange={e => {
-              const [n, r] = e.target.value.split("|");
-              setName(n);
-              setRoom(r);
-            }}
+          <form onSubmit={handleSubmit} className="flex flex-col gap-6 w-full max-w-lg mx-auto">
+          <div className="space-y-2">
+            <label className="block text-sm font-semibold text-gray-900 dark:text-gray-100">Select Teacher:</label>
+            <select
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-50 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+              value={name + "|" + room}
+              onChange={e => {
+                const [n, r] = e.target.value.split("|");
+                setName(n);
+                setRoom(r);
+              }}
+            >
+              {mockTeachers.map(t => (
+                <option key={t.name} value={t.name + "|" + t.room}>{t.name} ({t.room})</option>
+              ))}
+            </select>
+          </div>
+          <div className="space-y-2">
+            <label className="block text-sm font-semibold text-gray-900 dark:text-gray-100">Your Name:</label>
+            <input
+              type="text"
+              placeholder="Enter your name"
+              value={name}
+              onChange={e => setName(e.target.value)}
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-50 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+              required
+            />
+          </div>
+          <div className="space-y-2">
+            <label className="block text-sm font-semibold text-gray-900 dark:text-gray-100">Class/Room Name:</label>
+            <input
+              type="text"
+              placeholder="e.g., Math101"
+              value={room}
+              onChange={e => setRoom(e.target.value)}
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-50 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+              required
+            />
+          </div>
+          <button 
+            type="submit" 
+            className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold px-6 py-3 rounded-lg hover:from-blue-700 hover:to-blue-800 transition shadow-md mt-4"
           >
-            {mockTeachers.map(t => (
-              <option key={t.name} value={t.name + "|" + t.room}>{t.name} ({t.room})</option>
-            ))}
-          </select>
-          <input
-            type="text"
-            placeholder="Your Name"
-            value={name}
-            onChange={e => setName(e.target.value)}
-            className="border p-2 rounded"
-            required
-          />
-          <input
-            type="text"
-            placeholder="Class/Room Name"
-            value={room}
-            onChange={e => setRoom(e.target.value)}
-            className="border p-2 rounded"
-            required
-          />
-          <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Start Class</button>
-          {error && <p className="text-red-600">{error}</p>}
+            Start Class
+          </button>
+          {error && <p className="text-red-500 dark:text-red-400 text-sm bg-red-50 dark:bg-red-900/20 p-3 rounded-lg">{error}</p>}
         </form>
       ) : (
-        <div className="w-full livekit-wrapper">
+        <div className="w-full livekit-wrapper rounded-lg overflow-hidden">
           <LivekitToolbarFix />
           <LiveKitRoom
             token={token}
@@ -117,12 +132,15 @@ function ViewerList() {
   // Filter out the teacher (local participant)
   const viewers = Array.from(participants.values()).filter(p => !p.isLocal);
   return (
-    <div className="w-full border rounded p-4 mt-4">
-      <h2 className="font-semibold mb-2">Students Watching</h2>
-      <ul>
-        {viewers.length === 0 && <li>No students watching yet.</li>}
+    <div className="w-full border border-gray-200 dark:border-gray-700 rounded-lg p-6 mt-6 bg-gray-50 dark:bg-gray-800/50">
+      <h2 className="font-bold text-lg text-gray-900 dark:text-gray-50 mb-4">Students Watching ({viewers.length})</h2>
+      <ul className="space-y-2">
+        {viewers.length === 0 && <li className="text-gray-600 dark:text-gray-400">No students watching yet.</li>}
         {viewers.map((p) => (
-          <li key={p.identity}>{p.name || p.identity}</li>
+          <li key={p.identity} className="flex items-center gap-2 text-gray-800 dark:text-gray-200">
+            <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+            {p.name || p.identity}
+          </li>
         ))}
       </ul>
     </div>

@@ -34,7 +34,7 @@ const data = [
 const AttendanceChart = () => {
   return (
     /* ATTENDANCE CHART CONTAINER */
-    <div className='bg-white rounded-xl p-4 h-full'>
+    <div className='bg-white rounded-xl dark:rounded-3xl p-4 h-full bg-dark-2 '>
        
       { /* TITLE CONTAINER */ }
       <div className='flex justify-between items-center'>

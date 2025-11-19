@@ -1,7 +1,7 @@
 "use client"
 import Image from 'next/image';
 import { FaEllipsisH } from 'react-icons/fa';
-import { RadialBarChart, RadialBar, Legend, ResponsiveContainer } from 'recharts';
+import { RadialBarChart, RadialBar, ResponsiveContainer } from 'recharts';
 
  { /* RADIO CHART CODE */ }
 const data = [
@@ -26,7 +26,7 @@ const CountChart = () => {
   return ( 
 
      /* STUDENT CHART MAIN CONTAINER */ 
-    <div className=' bg-white rounded-xl w-full h-full p-4'>
+    <div className=' bg-white rounded-2xl dark:rounded-3xl w-full h-full p-4 bg-dark '>
       
       { /* TITLE AND MORE IMAGE ICON CONTAINER */ }
       <div className='flex justify-between items-center'>
@@ -56,7 +56,7 @@ const CountChart = () => {
 
         { /* BOYS TOTAL COUNT */ }
         <div className=' flex flex-col gap-1'>
-          <div className=' w-5 h-5 bg-PatoSky rounded-full '/>
+          <div className=' w-5 h-5 bg-PatoSky1 rounded-full '/>
             <h1 className='font-bold'>4,321</h1>
             <h2 className=' text-xs text-gray-300'>Boys (55%)</h2>
        </div>

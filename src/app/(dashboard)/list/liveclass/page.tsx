@@ -13,7 +13,7 @@ const LiveClass = () => {
       {/* LEFT  CONTAINER*/}
       <div className=" w-full xl:W-2/3 ">
 
-       <div className="h-full bg-white p-4 rounded-md ">
+       <div className="h-full bg-white bg-dark-2 p-4 rounded-md dark:rounded-3xl ">
 
           <h1 className=" text-xl font-semibold "> ExtraLive Classes </h1>
           <p className=" text-sm text-gray-400 font-light my-4 "> Empowering virtual learning for everyone </p>
@@ -27,9 +27,9 @@ const LiveClass = () => {
 
             <div className="flex flex-col sm:flex-row items-center sm:justify-evenly gap-3 mt-10 mb-9 w-full">
 
-              <Link className="w-full sm:w-auto max-w-xs flex items-center justify-center gap-2 px-6 py-3 bg-blue-400 text-white rounded-xl shadow hover:bg-blue-700 transition text-lg font-semibold focus:outline-none focus:ring-2 focus:ring-PatoSkyLight" href="liveclass/teacherslive">
+              <Link className="w-full sm:w-auto max-w-xs flex items-center justify-center gap-2 px-6 py-3 bg-blue-400 text-white rounded-xl shadow hover:bg-blue-700 transition text-lg font-semibold focus:ring-2 focus:ring-PatoSkyLight outline-none " href="liveclass/teacherslive">
 
-                <FaChalkboardTeacher className="text-2xl" />
+                <FaChalkboardTeacher className="text-2xl outline-none" />
                 <span>Teacher</span>
 
               </Link>
@@ -43,7 +43,7 @@ const LiveClass = () => {
 
             </div>
 
-            <div className=" mt-20 bg-white rounded-md p-4 h-[400px] md:h-[800px] overflow-auto">
+            <div className=" mt-20 bg-white bg-dark rounded-md p-4 md:h-[800px] h-screen ">
               <h1 className=" text-sm font-semibold text-gray-400 ">Extra Lesson&apos;s Schedule</h1>
               <BigCalendar/>
             </div>

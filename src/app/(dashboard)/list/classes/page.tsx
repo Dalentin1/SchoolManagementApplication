@@ -108,7 +108,7 @@ const ClassListPage = () => {
   return (
 
     /* TOP  CONTAINER*/
-    <div className='bg-white p-4 rounded-md flex-1 m-4 mt-0'>
+    <div className='bg-white bg-dark-2 p-4 rounded-md dark:rounded-3xl flex-1 m-4 mt-0'>
     
       <ListHeader title="All Classes" createTable={role === "admin" ? "class" : null} />
 

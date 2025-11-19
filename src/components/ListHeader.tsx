@@ -46,11 +46,18 @@ const ListHeader: React.FC<Props> = ({ title, createTable = null }) => {
         </div>
 
         <div className="flex items-center gap-3 sm:ml-2">
-          <button className=" w-8 h-8 flex items-center justify-center rounded-full bg-PatoYellow ">
+          <button 
+          className=" w-8 h-8 flex items-center justify-center rounded-full bg-PatoYellow "
+          title="Filter"
+          >
               < FaFilter className="text-gray-600" size={14} />
+
           </button>
 
-          <button className=" w-8 h-8 flex items-center justify-center rounded-full bg-PatoYellow ">
+          <button 
+          className=" w-8 h-8 flex items-center justify-center rounded-full bg-PatoYellow "
+          title="Sort"
+          >
               < FaSortAlphaUp className="text-gray-600" size={14} />
           </button>
 

@@ -9,6 +9,7 @@ import { FaEye } from "react-icons/fa";
 import prisma from "@/lib/prisma";
 import { ITEMS_PER_PAGE } from "@/lib/settings";
 import { Class, Prisma, Student } from "@prisma/client";
+
 type StudentList = Student & { class: Class };
 
 {

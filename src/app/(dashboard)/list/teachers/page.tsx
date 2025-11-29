@@ -11,7 +11,7 @@ import prisma from "@/lib/prisma";
 import { ITEMS_PER_PAGE } from "@/lib/settings";
 
 /* 
- TEMPOARY DATA TYPE FOR TEACHER (Prisma's `Teacher` already includes relations) 
+ DATA TYPE FOR TEACHER (Prisma's `Teacher` already includes relations) 
  Extend with concrete relation types for clarity in this component
 */
 type TeacherList = Teacher & { subjects: Subject[]; classes: Class[] };
@@ -136,6 +136,9 @@ const TeacherListPage = async ({
               contains: value,
               mode: "insensitive",
             };
+            break;
+          default:
+            break;
         }
       }
     }

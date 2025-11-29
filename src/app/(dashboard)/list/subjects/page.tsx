@@ -3,102 +3,118 @@ import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
 import ListHeader from "@/components/ListHeader";
-import { role, subjectsData} from "@/lib/data";
+import { role, subjectsData } from "@/lib/data";
 import Image from "next/image";
+import { Prisma, Subject, Teacher } from "@prisma/client";
+import prisma from "@/lib/prisma";
+import { ITEMS_PER_PAGE } from "@/lib/settings";
 
-{/* TEMPOARY DATA TYPE FOR PARENT */}
- type Subject = {
-  id:number;
-  name:string;
-  teachers:string[];
- };
+{
+  /* DATA TYPE FOR SUBJECT */
+}
+type SubjectList = Subject & { teachers: Teacher[] };
 
-{/* TABLE HEAD ARRAY STRUCTURE */}
+{
+  /* TABLE HEAD ARRAY STRUCTURE */
+}
 const columns = [
   {
-    header:"Subject Name", accessor:"name",
+    header: "Subject Name",
+    accessor: "name",
   },
   {
-    header:"Teachers", accessor:"teachers",
-    className:" hidden md:table-cell ",
-  }, 
-  {
-   header: "Actions",
-   accessor:"action",
+    header: "Teachers",
+    accessor: "teachers",
+    className: " hidden md:table-cell ",
   },
-]
+  {
+    header: "Actions",
+    accessor: "action",
+  },
+];
 
-const SubjectListPage = () => {
+const renderRow = (item: SubjectList) => (
+  <tr
+    key={item.id}
+    className=" border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-PatoPurple/10 transition-all duration-145"
+  >
+    <td className=" flex items-center gap-4 p-4">{item.name}</td>
 
-  const renderRow = (item:Subject) => [
-    <tr key={item.id} className=" border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-PatoPurple/10 transition-all duration-145">
-      
+    <td className=" hidden md:table-cell">
+      {item.teachers.map((teacher) => teacher.name).join(" , ")}
+    </td>
 
-      <td className=" flex items-center gap-4 p-4"> 
-        {item.name}
-      </td>
+    <td>
+      <div className="flex items-center gap-2">
+        {role === "admin" && (
+          <>
+            <FormModal table="subject" type="update" data={item} />
 
-      <td className=" hidden md:table-cell" >{item.teachers.join(" , ")}</td>
+            <FormModal table="subject" type="delete" id={item.id} />
+          </>
+        )}
+      </div>
+    </td>
+  </tr>
+);
 
-      <td>
+const SubjectListPage = async ({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | undefined };
+}) => {
+  const { page, ...queryParams } = searchParams;
 
-       <div className="flex items-center gap-2">
-         
-         {/* 
+  const p = page ? parseInt(page) : 1;
 
-            . Used this code before i wrote the FormModal component, applies also for the teacher and student list dashboards...
-         
-            <Link href={`/list/teachers/${item.id}`}>
-            
-            <button className=" w-7 h-7 flex items-center justify-center rounded-full bg-PatoSky ">
+  // URL PARAMS CONDITION
 
-              <Image src="/edit.png" alt="" width={16} height={16}/>
+  const query: Prisma.SubjectWhereInput = {};
 
-            </button> 
+  if (queryParams) {
+    for (const [key, value] of Object.entries(queryParams)) {
+      if (value !== undefined) {
+        switch (key) {
+          case "search":
+            query.name = {
+              contains: value,
+              mode: "insensitive",
+            };
+            break;
+          default:
+            break;
+        }
+      }
+    }
+  }
 
-            </Link>
-          */}
+  const [data, count] = await prisma.$transaction([
+    prisma.subject.findMany({
+      where: query,
+      include: {
+        teachers: true,
+      },
+      take: ITEMS_PER_PAGE,
+      skip: ITEMS_PER_PAGE * (p - 1),
+    }),
 
-          { role === "admin" && (
-            /* <button className=" w-7 h-7 flex items-center justify-center rounded-full bg-PatoPurple ">
-
-              <Image src="/delete.png" alt="" width={16} height={16}/>
-
-            </button> */
-
-           <>
-           <FormModal table="subject" type="update" data= {item} />
-
-           <FormModal table="subject" type="delete" id= {item.id} />
-           </>
-            
-
-
-          )} 
-
-
-       </div>
-
-      </td>
-    </tr>
-  ]
-
+    prisma.subject.count({ where: query }),
+  ]);
 
   return (
-
     /* TOP  CONTAINER*/
-    <div className='bg-white bg-dark p-4 rounded-md dark:rounded-3xl flex-1 m-4 mt-0'>
-    
-      <ListHeader title="All Subjects" createTable={role === "admin" ? "subject" : null} />
+    <div className="bg-white bg-dark p-4 rounded-md dark:rounded-3xl flex-1 m-4 mt-0">
+      <ListHeader
+        title="All Subjects"
+        createTable={role === "admin" ? "subject" : null}
+      />
 
       {/* LIST  LINK */}
-      <Table columns={columns} renderRow={renderRow} data={subjectsData} />
- 
+      <Table columns={columns} renderRow={renderRow} data={data} />
 
       {/* PAGINATION  LINK */}
-      <Pagination page={1} count={subjectsData.length} />
-
-  </div>
+      <Pagination page={p} count={count} />
+    </div>
   );
 };
 

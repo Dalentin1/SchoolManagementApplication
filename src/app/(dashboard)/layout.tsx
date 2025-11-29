@@ -8,8 +8,8 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex h-full">
-      {/* Sidebar: hidden on small screens, visible md+ */}
-      <div className="hidden md:block w-[14%] md:w-[8%] lg:w-[16%] xl:w-[14%] p-4 bg-white">
+      {/* Sidebar: hidden on small and md screens, visible lg+ */}
+      <div className="hidden lg:block w-[14%] md:w-[8%] lg:w-[16%] xl:w-[14%] p-4 bg-white">
         <LogoLink />
         <Menu />
       </div>

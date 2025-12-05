@@ -99,7 +99,7 @@ datasource db {
  *   updatedAt: 2025-12-05T10:30:00Z
  * }
  */
-model user {
+model User {
   id        String   @id // Clerk user ID (assigned by Clerk)
   email     String   @unique // User's email, must be unique across all users
   role      String   // Role: "admin", "teacher", "student", "parent"
@@ -169,7 +169,7 @@ model Grade {
   id    Int @id @default(autoincrement())
   level Int @unique
   students Student[]
-  classess Class[]
+  classes Class[]
 }
 
 model Class {

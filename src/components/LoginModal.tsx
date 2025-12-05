@@ -88,7 +88,7 @@ const LoginModal = ({ open = true }: { open?: boolean }) => {
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40 backdrop-blur-sm">
       <div className="relative w-[92%] max-w-md">
-        <div className="bg-white/60 backdrop-blur-md border border-white/30 rounded-2xl p-6 shadow-2xl overflow-hidden mt-32 ">
+        <div className="bg-white/60 backdrop-blur-md border border-white/30 rounded-2xl p-6 shadow-2xl overflow-hidden mt-10 ">
           <div className="flex items-start gap-4">
             <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-gradient-to-br from-indigo-600 to-blue-400 flex items-center justify-center text-white text-lg font-bold">
               SS
@@ -136,8 +136,7 @@ const LoginModal = ({ open = true }: { open?: boolean }) => {
                   Parent
                 </option>
               </select>
-              <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-gray-400">
-              </div>
+              <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-gray-400"></div>
             </div>
 
             <label className="text-sm font-medium text-gray-700">
@@ -197,7 +196,7 @@ const LoginModal = ({ open = true }: { open?: boolean }) => {
           </form>
         </div>
 
-        <div className=" flex items-center justify-center mt-36 text-xs text-black-400 ">
+        <div className=" flex items-center justify-center mt-14 text-xs text-black-400 ">
           &copy; {new Date().getFullYear()} Smart Schooling All rights reserved.
           Developed by Patrick U. Nnodu
         </div>

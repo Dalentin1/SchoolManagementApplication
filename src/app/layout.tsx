@@ -24,10 +24,35 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        {/* Prevent flash of wrong theme by applying stored preference before React hydrates */}
+        {/* Apply stored theme preference BEFORE React hydrates to prevent flash.
+            This script also hides the body briefly to prevent a visible flash. */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem('sma_theme');if(t==='dark'){document.documentElement.classList.add('dark')}else{document.documentElement.classList.remove('dark')}}catch(e){}})()`,
+            __html: `
+              (function(){
+                try {
+                  // Hide body to prevent flash while theme is being applied
+                  document.body.style.visibility = 'hidden';
+                  document.body.style.opacity = '0';
+                  
+                  var t = localStorage.getItem('sma_theme');
+                  if (t === 'dark') {
+                    document.documentElement.classList.add('dark');
+                  } else {
+                    document.documentElement.classList.remove('dark');
+                  }
+                  
+                  // Show body now that theme is applied
+                  document.body.style.visibility = 'visible';
+                  document.body.style.opacity = '1';
+                  document.body.style.transition = 'opacity 0s';
+                } catch(e) {
+                  // Fallback: show body anyway if error
+                  document.body.style.visibility = 'visible';
+                  document.body.style.opacity = '1';
+                }
+              })();
+            `,
           }}
         />
         {children}

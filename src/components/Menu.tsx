@@ -299,12 +299,10 @@ const Menu: React.FC<MenuProps> = ({ showLabels = false, onItemClick }) => {
                 >
                   {item.icon ? (
                     // Wrapped span allows responsive hiding for Announcements:
-                    // show on small, hide at md (768px), show again on lg
+                    // Always show the icon at all breakpoints
                     <span
                       className={
-                        isAnnouncements
-                          ? "inline-flex md:hidden lg:inline-flex"
-                          : "inline-flex"
+                        isAnnouncements ? "inline-flex" : "inline-flex"
                       }
                     >
                       <item.icon size={isAnnouncements ? 22 : 20} />

@@ -121,7 +121,7 @@ const LessonListPage = async ({
 
   return (
     /* TOP  CONTAINER*/
-    <div className="bg-white bg-dark p-4 rounded-md dark:rounded-3xl flex-1 m-4 mt-0">
+    <div className="bg-white bg-dark p-4 rounded-md dark:rounded-3xl flex-1 mx-4 my-4 md:mx-0 md:my-0 md:p-6">
       <ListHeader
         title="All Lessons"
         createTable={role === "admin" ? "lesson" : null}

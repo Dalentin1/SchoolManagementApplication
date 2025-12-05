@@ -1,211 +1,160 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import * as Clerk from "@clerk/elements/common";
+import * as SignIn from "@clerk/elements/sign-in";
+import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
-import { setAuth } from "@/lib/auth";
+import { FaUser, FaLock } from "react-icons/fa";
 
-// Default demo passwords - I kept it here, so the UI and auth logic share the same
-// values. In a production scenario these would be validated on the server.
-const DEFAULT_PASSWORDS: Record<string, string> = {
-  admin: "admin1",
-  teacher: "teacher1",
-  student: "student1",
-  parent: "parent1",
-};
-
-const LoginModal = ({ open = true }: { open?: boolean }) => {
+/**
+ * LOGIN MODAL: Professional Sign-in Component
+ *
+ * Features:
+ * - Responsive design (works from 425px up)
+ * - Professional styling with glassmorphism
+ * - Loading spinner on submit
+ * - Input icons for visual clarity
+ * - Smooth animations and transitions
+ * - Dark mode support
+ * - Auto-redirect on successful sign-in
+ */
+const LoginModal = () => {
+  const { isSignedIn, user, isLoaded } = useUser();
   const router = useRouter();
-  const [isOpen, setIsOpen] = useState(open);
-  const [role, setRole] = useState<"admin" | "teacher" | "student" | "parent">(
-    "admin"
-  );
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Redirect if already signed in
   useEffect(() => {
-    setIsOpen(open);
-  }, [open]);
+    const role = user?.publicMetadata.role;
 
-  // Simulate an async login call so the spinner is visible. Returns true when
-  // password === expected. I made this to keep the demo feeling realistic.
-  const simulateLogin = (expected: string) => {
-    setLoading(true);
-    setError("");
-    return new Promise<boolean>((resolve) => {
-      setTimeout(() => {
-        const ok = password === expected;
-        resolve(ok);
-      }, 800);
-    });
-  };
-
-  // handleLogin: called when the form is submitted. On success we persist the
-  // demo auth (role) using setAuth and navigate to the appropriate dashboard.
-  // Detailed comments explain the flow for maintainers.
-  const handleLogin = async (e?: React.FormEvent) => {
-    e?.preventDefault();
-    const expected = DEFAULT_PASSWORDS[role];
-    setError("");
-    setLoading(true);
-    const ok = await simulateLogin(expected);
-    setLoading(false);
-    if (ok) {
-      // Persist demo auth so other components (Menu) can detect signed-in
-      // state and route users appropriately when they click Home.
-      try {
-        setAuth(role);
-      } catch (err) {
-        // I ignored localStorage errors in the demo
-      }
-
-      setIsOpen(false);
-      // I made a small delay, it helps the modal disappear before navigation, avoiding
-      // janky transitions in the client router.
-      setTimeout(() => {
-        switch (role) {
-          case "admin":
-            router.push("/admin");
-            break;
-          case "teacher":
-            router.push("/teacher");
-            break;
-          case "student":
-            router.push("/student");
-            break;
-          case "parent":
-            router.push("/parent");
-            break;
-        }
-      }, 120);
-    } else {
-      setError("Invalid password for the selected role");
-      // shake animation could be added via CSS class toggle
+    if (role) {
+      router.push(`/${role}`);
     }
-  };
-
-  if (!isOpen) return null;
+  }, [user, router]);
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40 backdrop-blur-sm">
-      <div className="relative w-[92%] max-w-md">
-        <div className="bg-white/60 backdrop-blur-md border border-white/30 rounded-2xl p-6 shadow-2xl overflow-hidden mt-10 ">
-          <div className="flex items-start gap-4">
-            <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-gradient-to-br from-indigo-600 to-blue-400 flex items-center justify-center text-white text-lg font-bold">
-              SS
-            </div>
-            <div className="flex-1">
-              <h2 className="text-2xl font-semibold">Welcome back</h2>
-              <p className="text-sm text-gray-700">
-                Sign in to access your dashboard. This is a demo: ask programmer
-                for default passwords
-              </p>
-            </div>
-          </div>
+    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+      <SignIn.Root>
+        <SignIn.Step name="start">
+          <div className="relative w-full max-w-sm sm:max-w-md">
+            {/* MAIN CARD */}
+            <div className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border border-white/30 dark:border-gray-700/30 rounded-3xl p-6 sm:p-8 shadow-2xl overflow-hidden">
+              {/* HEADER */}
+              <div className="flex items-start gap-3 sm:gap-4 mb-6 sm:mb-8">
+                {/* LOGO */}
+                <div className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-indigo-600 via-indigo-500 to-blue-400 flex items-center justify-center text-white text-base sm:text-lg font-bold shadow-lg">
+                  SS
+                </div>
 
-          <form onSubmit={handleLogin} className="mt-5 flex flex-col gap-3">
-            <label className="text-sm font-medium text-gray-700">Role</label>
-            <div className="relative">
-              <select
-                value={role}
-                onChange={(e) => setRole(e.target.value as any)}
-                className="w-full border border-gray-200 rounded-md px-3 py-2 bg-white/80 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-50 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition "
-              >
-                <option
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-50 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-                  value="admin"
-                >
-                  Admin
-                </option>
+                {/* TEXT */}
+                <div className="flex-1 min-w-0">
+                  <h2 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent">
+                    Welcome back
+                  </h2>
+                  <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1">
+                    Sign in to access your dashboard
+                  </p>
+                </div>
+              </div>
 
-                <option
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-50 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-                  value="teacher"
-                >
-                  Teacher
-                </option>
-                <option
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-50 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-                  value="student"
-                >
-                  Student
-                </option>
-                <option
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-50 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-                  value="parent"
-                >
-                  Parent
-                </option>
-              </select>
-              <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-gray-400"></div>
-            </div>
+              {/* ERROR MESSAGES */}
+              <div className="mb-4">
+                <Clerk.GlobalError className="text-xs sm:text-sm text-red-500 bg-red-50 dark:bg-red-900/20 p-3 rounded-lg" />
+              </div>
 
-            <label className="text-sm font-medium text-gray-700">
-              Password
-            </label>
-            <input
-              disabled={loading}
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full border border-gray-200 rounded-md px-3 py-2 bg-white/80 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-50 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition "
-            />
-
-            {error && <div className="text-sm text-red-600">{error}</div>}
-
-            <div className="flex items-center justify-between gap-2 mt-2">
-              <button
-                type="button"
-                onClick={() => setIsOpen(false)}
-                className="px-4 py-2 rounded-md border border-gray-200 text-sm dark:border-gray-600 dark:bg-gray-800 "
-              >
-                Cancel
-              </button>
-
-              <button
-                type="submit"
-                disabled={loading}
-                className="relative inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-md text-sm shadow"
-              >
-                {loading && (
-                  <svg
-                    className="w-4 h-4 animate-spin text-white"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <circle
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                      className="opacity-25"
+              {/* FORM FIELDS */}
+              <div className="space-y-4 sm:space-y-5">
+                {/* USERNAME FIELD */}
+                <Clerk.Field name="identifier">
+                  <Clerk.Label className="block text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                    Username or Email
+                  </Clerk.Label>
+                  <div className="relative">
+                    <FaUser className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 text-sm" />
+                    <Clerk.Input
+                      type="text"
+                      className="w-full pl-9 sm:pl-11 pr-4 py-2.5 sm:py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm sm:text-base text-gray-900 dark:text-gray-50 placeholder-gray-400 dark:placeholder-gray-500 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent focus:bg-white dark:focus:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-600"
+                      placeholder="Enter your username or email"
                     />
-                    <path
-                      d="M4 12a8 8 0 018-8"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                      strokeLinecap="round"
-                      className="opacity-75"
+                  </div>
+                  <Clerk.FieldError className="text-xs sm:text-sm text-red-500 mt-1.5" />
+                </Clerk.Field>
+
+                {/* PASSWORD FIELD */}
+                <Clerk.Field name="password">
+                  <Clerk.Label className="block text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                    Password
+                  </Clerk.Label>
+                  <div className="relative">
+                    <FaLock className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 text-sm" />
+                    <Clerk.Input
+                      type="password"
+                      required
+                      className="w-full pl-9 sm:pl-11 pr-4 py-2.5 sm:py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm sm:text-base text-gray-900 dark:text-gray-50 placeholder-gray-400 dark:placeholder-gray-500 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent focus:bg-white dark:focus:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-600"
+                      placeholder="Enter your password"
                     />
-                  </svg>
+                  </div>
+                  <Clerk.FieldError className="text-xs sm:text-sm text-red-500 mt-1.5" />
+                </Clerk.Field>
+              </div>
+
+              {/* SUBMIT BUTTON WITH SPINNER */}
+              <SignIn.Action
+                submit
+                onClick={() => setIsSubmitting(true)}
+                className="w-full mt-6 sm:mt-8 relative inline-flex items-center justify-center px-4 py-2.5 sm:py-3 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white text-sm sm:text-base font-semibold rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {/* SPINNER */}
+                {isSubmitting && (
+                  <span className="absolute inset-0 flex items-center justify-center">
+                    <svg
+                      className="w-5 h-5 animate-spin"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      />
+                    </svg>
+                  </span>
                 )}
-                <span>{loading ? "Signing in..." : "Sign in"}</span>
-              </button>
+
+                {/* TEXT */}
+                <span className={isSubmitting ? "opacity-0" : "opacity-100"}>
+                  Sign In
+                </span>
+              </SignIn.Action>
+
+              {/* DIVIDER */}
+              <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-gray-200 dark:border-gray-700/50 text-center">
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  &copy; {new Date().getFullYear()} Smart Schooling Management
+                </p>
+                <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
+                  All rights reserved
+                </p>
+              </div>
             </div>
-          </form>
-        </div>
 
-        <div className=" flex items-center justify-center mt-14 text-xs text-black-400 ">
-          &copy; {new Date().getFullYear()} Smart Schooling All rights reserved.
-          Developed by Patrick U. Nnodu
-        </div>
-
-        <div
-          className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-[260px] h-6 rounded-t-full bg-gradient-to-r from-indigo-400 to-blue-300 opacity-30 blur-lg"
-          aria-hidden
-        />
-      </div>
+            {/* GRADIENT DECORATION */}
+            <div
+              className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-48 sm:w-64 h-8 rounded-t-full bg-gradient-to-r from-indigo-400 to-blue-300 opacity-20 blur-2xl"
+              aria-hidden
+            />
+          </div>
+        </SignIn.Step>
+      </SignIn.Root>
     </div>
   );
 };

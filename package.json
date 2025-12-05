@@ -11,6 +11,7 @@
     "seed:counts": "node prisma/seed-counts.js"
   },
   "dependencies": {
+    "@clerk/elements": "^0.23.87",
     "@clerk/nextjs": "^6.35.5",
     "@headlessui/react": "^2.2.7",
     "@hookform/resolvers": "^5.1.1",
@@ -41,6 +42,7 @@
     "recharts": "^3.1.0",
     "screenfull": "^6.0.2",
     "sonner": "^2.0.7",
+    "svix": "^1.82.0",
     "tailwind-merge": "^3.3.1",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^4.0.5"

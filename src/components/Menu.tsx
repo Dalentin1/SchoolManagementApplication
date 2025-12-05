@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useClerk } from "@clerk/nextjs";
 import { getRole, isAuthenticated, clearAuth } from "@/lib/auth";
 import { role as demoRole } from "@/lib/data";
 import { IconType } from "react-icons";
@@ -158,11 +159,19 @@ const menuItems: { title: string; items: MenuItem[] }[] = [
 interface MenuProps {
   showLabels?: boolean;
   onItemClick?: () => void;
+  onShowLoader?: () => void;
+  lastPath?: string;
 }
 
-const Menu: React.FC<MenuProps> = ({ showLabels = false, onItemClick }) => {
+const Menu: React.FC<MenuProps> = ({
+  showLabels = false,
+  onItemClick,
+  onShowLoader,
+  lastPath = "",
+}) => {
   const router = useRouter();
   const pathname = usePathname();
+  const { signOut } = useClerk();
   const [currentRole, setCurrentRole] = useState<string | null>(null);
   const [pendingClose, setPendingClose] = useState<string | null>(null);
 
@@ -215,8 +224,15 @@ const Menu: React.FC<MenuProps> = ({ showLabels = false, onItemClick }) => {
               if (item.label === "Home") {
                 const handleHome = (e: React.MouseEvent) => {
                   e.preventDefault();
+                  const targetPath = currentRole
+                    ? `/${currentRole}`
+                    : item.href;
+                  // Only show loader if navigating to a different page
+                  if (targetPath !== lastPath) {
+                    onShowLoader?.();
+                  }
                   // Defer closing until navigation finishes
-                  setPendingClose(currentRole ? `/${currentRole}` : item.href);
+                  setPendingClose(targetPath);
                   if (currentRole) {
                     // route to the authenticated user's dashboard
                     router.push(`/${currentRole}`);
@@ -234,7 +250,7 @@ const Menu: React.FC<MenuProps> = ({ showLabels = false, onItemClick }) => {
                       showLabels
                         ? "justify-start"
                         : "justify-center lg:justify-start"
-                    } gap-4 text-gray-500 py-2 md:px-2 rounded-md hover:bg-gray-100 transition-colors cursor-pointer`}
+                    } gap-4 text-gray-500 py-2 md:px-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors cursor-pointer`}
                   >
                     {item.icon ? <item.icon size={20} /> : null}
                     <span className={showLabels ? "block" : "hidden lg:block"}>
@@ -244,20 +260,20 @@ const Menu: React.FC<MenuProps> = ({ showLabels = false, onItemClick }) => {
                 );
               }
 
-              // Special-case "Logout": call clearAuth() and navigate to the
-              // sign-in page. I intentionally use an anchor-like element with
-              // an onClick handler because Logout must run client-side and
-              // cannot be expressed as a plain Link href.
+              // Special-case "Logout": Use Clerk to sign out and redirect to sign-in
               if (item.label === "Logout") {
-                const handleLogout = (e: React.MouseEvent) => {
+                const handleLogout = async (e: React.MouseEvent) => {
                   e.preventDefault();
-                  // clear persisted demo auth state so other components know
-                  // the user is signed out
-                  clearAuth();
-                  // Defer closing until sign-in page is shown
-                  setPendingClose("/sign-in");
-                  // navigate to sign-in page
-                  router.push("/sign-in");
+                  try {
+                    // Clear demo auth state
+                    clearAuth();
+                    // Sign out from Clerk
+                    await signOut({ redirectUrl: "/" });
+                  } catch (error) {
+                    console.error("Logout error:", error);
+                    // Redirect anyway
+                    router.push("/");
+                  }
                 };
 
                 return (
@@ -268,7 +284,7 @@ const Menu: React.FC<MenuProps> = ({ showLabels = false, onItemClick }) => {
                       showLabels
                         ? "justify-start"
                         : "justify-center lg:justify-start"
-                    } gap-4 text-gray-500 py-2 md:px-2 rounded-md hover:bg-gray-100 transition-colors cursor-pointer`}
+                    } gap-4 text-gray-500 py-2 md:px-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors cursor-pointer`}
                   >
                     {item.icon ? <item.icon size={20} /> : null}
                     <span className={showLabels ? "block" : "hidden lg:block"}>
@@ -280,32 +296,26 @@ const Menu: React.FC<MenuProps> = ({ showLabels = false, onItemClick }) => {
 
               // Default rendering for other menu items: I used Link so Next can
               // prefetch and perform client navigation.
-              // If this is the Announcements item, apply responsive classes
-              // to hide the icon at the `md` breakpoint (768px) and ensure
-              // the label is shown there. Also call `onItemClick` when the
-              // item is activated so parent drawers can close automatically.
-              const isAnnouncements = item.label === "Announcements";
-
               return (
                 <Link
                   href={item.href}
                   key={item.label}
-                  onClick={() => setPendingClose(item.href)}
+                  onClick={() => {
+                    // Only show loader if navigating to a different page
+                    if (item.href !== lastPath) {
+                      onShowLoader?.();
+                    }
+                    setPendingClose(item.href);
+                  }}
                   className={`flex items-center ${
                     showLabels
                       ? "justify-start"
                       : "justify-center lg:justify-start"
-                  } gap-4 text-gray-500 py-2 md:px-2 rounded-md hover:bg-gray-100 transition-colors`}
+                  } gap-4 text-gray-500 py-2 md:px-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200`}
                 >
                   {item.icon ? (
-                    // Wrapped span allows responsive hiding for Announcements:
-                    // Always show the icon at all breakpoints
-                    <span
-                      className={
-                        isAnnouncements ? "inline-flex" : "inline-flex"
-                      }
-                    >
-                      <item.icon size={isAnnouncements ? 22 : 20} />
+                    <span className="inline-flex">
+                      <item.icon size={20} />
                     </span>
                   ) : null}
                   <span className={showLabels ? "block" : "hidden lg:block"}>

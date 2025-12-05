@@ -3,126 +3,156 @@ import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
 import ListHeader from "@/components/ListHeader";
-import {examsData, role} from "@/lib/data";
-import Image from "next/image";
-import Link from "next/link";
+import { examsData, role } from "@/lib/data";
+import prisma from "@/lib/prisma";
+import { ITEMS_PER_PAGE } from "@/lib/settings";
+import { Class, Exam, Prisma, Subject, Teacher } from "@prisma/client";
 
-{/* TEMPOARY DATA TYPE FOR EXAM */}
-type Exam = {
-  id: number;
-  subject: string;
-  class: string;
-  teacher: string;
-  date: string;
+{
+  /*DATA TYPE FOR EXAM */
+}
+type ExamList = Exam & {
+  lesson: {
+    subject: Subject;
+    class: Class;
+    teacher: Teacher;
+  };
 };
 
-{/* TABLE HEAD ARRAY STRUCTURE */}
+{
+  /* TABLE HEAD ARRAY STRUCTURE */
+}
 const columns = [
   {
-    header:"Subject Name", accessor:"subjectName",
+    header: "Subject Name",
+    accessor: "subjectName",
   },
 
   {
-    header:"Class", accessor:"class",
+    header: "Class",
+    accessor: "class",
   },
 
   {
-    header:"Teacher", accessor:"teacher",
-    className:" hidden md:table-cell ",
+    header: "Teacher",
+    accessor: "teacher",
+    className: " hidden md:table-cell ",
   },
 
   {
-    header:"Date", accessor:"date",
-    className:" hidden md:table-cell ",
+    header: "Date",
+    accessor: "date",
+    className: " hidden md:table-cell ",
   },
 
   {
-  header: "Actions",
-  accessor:"action",
+    header: "Actions",
+    accessor: "action",
   },
-]
+];
 
-const ExamListPage = () => {
+const renderRow = (item: ExamList) => (
+  <tr
+    key={item.id}
+    className=" border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-PatoPurple/10 transition-all duration-145"
+  >
+    <td className=" flex items-center gap-4  p-4">
+      {item.lesson.subject.name}
+    </td>
 
-  const renderRow = (item:Exam) => [
-    <tr key={item.id} className=" border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-PatoPurple/10 transition-all duration-145">
-      
+    <td>{item.lesson.class.name}</td>
 
-      <td className=" flex items-center gap-4 p-4"> 
-        {item.subject}
-      </td>
+    <td className=" hidden md:table-cell">
+      {item.lesson.teacher.name + " " + item.lesson.teacher.surname}
+    </td>
 
-      <td >
-        {item.class}
-      </td>
+    <td className=" hidden md:table-cell">
+      {new Intl.DateTimeFormat("en-UK").format(item.startTime)}
+    </td>
 
-      <td className=" hidden md:table-cell" >
-        {item.teacher}
-      </td>
-
-      <td className=" hidden md:table-cell" >
-        {item.date}
-      </td>
-
-      <td>
-
+    <td>
       <div className="flex items-center gap-2">
-         
-         {/* 
+        {role === "admin" && (
+          <>
+            <FormModal table="exam" type="update" data={item} />
 
-            . Used this code before i wrote the FormModal component, applies also for the teacher and student list dashboards...
-         
-            <Link href={`/list/teachers/${item.id}`}>
-            
-            <button className=" w-7 h-7 flex items-center justify-center rounded-full bg-PatoSky ">
+            <FormModal table="exam" type="delete" id={item.id} />
+          </>
+        )}
+      </div>
+    </td>
+  </tr>
+);
 
-              <Image src="/edit.png" alt="" width={16} height={16}/>
+const ExamListPage = async ({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | undefined };
+}) => {
+  const { page, ...queryParams } = searchParams;
 
-            </button> 
+  const p = page ? parseInt(page) : 1;
 
-            </Link>
-          */}
+  // URL PARAMS CONDITION
 
-          { role === "admin" && (
-            /* <button className=" w-7 h-7 flex items-center justify-center rounded-full bg-PatoPurple ">
+  const query: Prisma.ExamWhereInput = {};
 
-              <Image src="/delete.png" alt="" width={16} height={16}/>
+  if (queryParams) {
+    for (const [key, value] of Object.entries(queryParams)) {
+      if (value !== undefined) {
+        switch (key) {
+          case "classId":
+            query.lesson = { classId: parseInt(value) };
+            break;
+          case "teacherId":
+            query.lesson = { teacherId: value };
+            break;
+          case "search":
+            query.lesson = {
+              subject: { name: { contains: value, mode: "insensitive" } },
+              teacher: { name: { contains: value, mode: "insensitive" } },
+            };
+            break;
+          default:
+            break;
+        }
+      }
+    }
+  }
 
-            </button> */
+  const [data, count] = await prisma.$transaction([
+    prisma.exam.findMany({
+      where: query,
+      include: {
+        lesson: {
+          select: {
+            subject: { select: { name: true } },
+            teacher: { select: { name: true, surname: true } },
+            class: { select: { name: true } },
+          },
+        },
+      },
+      take: ITEMS_PER_PAGE,
+      skip: ITEMS_PER_PAGE * (p - 1),
+    }),
 
-           <>
-           <FormModal table="exam" type="update" data= {item} />
-
-           <FormModal table="exam" type="delete" id= {item.id} />
-           </>
-            
-
-
-          )} 
-
-
-       </div>
-
-      </td>
-    </tr>
-  ]
-
+    prisma.exam.count({ where: query }),
+  ]);
 
   return (
-
     /* TOP  CONTAINER*/
-    <div className='bg-white bg-dark-2 p-4 rounded-md dark:rounded-3xl flex-1 m-4 mt-0'>
-    
-      <ListHeader title="All Examinations" createTable={role === "admin" ? "exam" : null} />
+    <div className="bg-white bg-dark-2 p-4 rounded-md dark:rounded-3xl flex-1 m-4 mt-0">
+      <ListHeader
+        title="All Examinations"
+        createTable={role === "admin" ? "exam" : null}
+      />
 
       {/* LIST  LINK */}
-      <Table columns={columns} renderRow={renderRow} data={examsData} />
-
+      <Table columns={columns} renderRow={renderRow} data={data} />
 
       {/* PAGINATION  LINK */}
-      <Pagination page={1} count={10}/>
-
-  </div>
+      <Pagination page={p} count={count} />
+    </div>
   );
 };
 

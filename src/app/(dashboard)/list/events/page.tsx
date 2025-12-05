@@ -3,136 +3,156 @@ import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
 import ListHeader from "@/components/ListHeader";
-import {eventsData, role} from "@/lib/data";
+import { eventsData, role } from "@/lib/data";
 import Image from "next/image";
 import Link from "next/link";
+import prisma from "@/lib/prisma";
+import { ITEMS_PER_PAGE } from "@/lib/settings";
+import { Class, Event, Prisma } from "@prisma/client";
 
-{/* TEMPOARY DATA TYPE FOR EXAM */}
-type Event = {
-  id: number;
-  title: string;
-  class: string;
-  date: string;
-  startTime:string;
-  endTime:string;
-};
+{
+  /*DATA TYPE FOR EVENT */
+}
+type EventList = Event & { class: Class };
 
-{/* TABLE HEAD ARRAY STRUCTURE */}
+{
+  /* TABLE HEAD ARRAY STRUCTURE */
+}
 const columns = [
   {
-    header:"Title", accessor:"title",
+    header: "Title",
+    accessor: "title",
   },
 
   {
-    header:"Class", accessor:"class",
+    header: "Class",
+    accessor: "class",
   },
 
   {
-    header:"Date", accessor:"date",
-    className:" hidden md:table-cell ",
+    header: "Date",
+    accessor: "date",
+    className: " hidden md:table-cell ",
   },
 
   {
-    header:"Start Time", accessor:"startTime",
-    className:" hidden md:table-cell ",
+    header: "Start Time",
+    accessor: "startTime",
+    className: " hidden md:table-cell ",
   },
 
   {
-    header:"End Time", accessor:"endTime",
-    className:" hidden md:table-cell ",
+    header: "End Time",
+    accessor: "endTime",
+    className: " hidden md:table-cell ",
   },
 
   {
-  header: "Actions",
-  accessor:"action",
+    header: "Actions",
+    accessor: "action",
   },
-]
+];
 
-const EventListPage = () => {
+const renderRow = (item: EventList) => (
+  <tr
+    key={item.id}
+    className=" border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-PatoPurple/10 transition-all duration-145"
+  >
+    <td className=" flex items-center gap-4 p-4">{item.title}</td>
 
-  const renderRow = (item:Event) => [
-    <tr key={item.id} className=" border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-PatoPurple/10 transition-all duration-145">
-      
+    <td>{item.class.name}</td>
 
-      <td className=" flex items-center gap-4 p-4"> 
-        {item.title}
-      </td>
+    <td className=" hidden md:table-cell">
+      {new Intl.DateTimeFormat("en-UK").format(item.startTime)}
+    </td>
 
-      <td >
-        {item.class}
-      </td>
+    <td className=" hidden md:table-cell">
+      {item.startTime.toLocaleTimeString("en-UK", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      })}
+    </td>
 
-      <td className=" hidden md:table-cell" >
-        {item.date}
-      </td>
+    <td className=" hidden md:table-cell">
+      {item.endTime.toLocaleTimeString("en-UK", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      })}
+    </td>
 
-      <td className=" hidden md:table-cell" >
-        {item.startTime}
-      </td>
-
-      <td className=" hidden md:table-cell">
-        {item.endTime}
-      </td>
-
-      <td>
-
+    <td>
       <div className="flex items-center gap-2">
-         
-         {/* 
+        {role === "admin" && (
+          <>
+            <FormModal table="event" type="update" data={item} />
 
-            . Used this code before i wrote the FormModal component, applies also for the teacher and student list dashboards...
-         
-            <Link href={`/list/teachers/${item.id}`}>
-            
-            <button className=" w-7 h-7 flex items-center justify-center rounded-full bg-PatoSky ">
+            <FormModal table="event" type="delete" id={item.id} />
+          </>
+        )}
+      </div>
+    </td>
+  </tr>
+);
 
-              <Image src="/edit.png" alt="" width={16} height={16}/>
+const EventListPage = async ({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | undefined };
+}) => {
+  const { page, ...queryParams } = searchParams;
 
-            </button> 
+  const p = page ? parseInt(page) : 1;
 
-            </Link>
-          */}
+  // URL PARAMS CONDITION
 
-          { role === "admin" && (
-            /* <button className=" w-7 h-7 flex items-center justify-center rounded-full bg-PatoPurple ">
+  const query: Prisma.EventWhereInput = {};
 
-              <Image src="/delete.png" alt="" width={16} height={16}/>
+  if (queryParams) {
+    for (const [key, value] of Object.entries(queryParams)) {
+      if (value !== undefined) {
+        switch (key) {
+          case "search":
+            query.title = {
+              contains: value,
+              mode: "insensitive",
+            };
+            break;
+          default:
+            break;
+        }
+      }
+    }
+  }
 
-            </button> */
+  const [data, count] = await prisma.$transaction([
+    prisma.event.findMany({
+      where: query,
+      include: {
+        class: true,
+      },
+      take: ITEMS_PER_PAGE,
+      skip: ITEMS_PER_PAGE * (p - 1),
+    }),
 
-           <>
-           <FormModal table="event" type="update" data= {item}  />
-
-           <FormModal table="event" type="delete" id= {item.id} />
-           </>
-            
-
-
-          )} 
-
-
-       </div>
-
-      </td>
-    </tr>
-  ]
-
+    prisma.event.count({ where: query }),
+  ]);
 
   return (
-
     /* TOP  CONTAINER*/
-    <div className='bg-white bg-dark-2 p-4 rounded-md dark:rounded-3xl flex-1 m-4 mt-0'>
-    
-      <ListHeader title="All Events" createTable={role === "admin" ? "event" : null} />
+    <div className="bg-white bg-dark-2 p-4 rounded-md dark:rounded-3xl flex-1 m-4 mt-0">
+      <ListHeader
+        title="All Events"
+        createTable={role === "admin" ? "event" : null}
+      />
 
       {/* LIST  LINK */}
-      <Table columns={columns} renderRow={renderRow} data={eventsData} />
-
+      <Table columns={columns} renderRow={renderRow} data={data} />
 
       {/* PAGINATION  LINK */}
-      <Pagination page={1} count={eventsData.length}/>
-
-  </div>
+      <Pagination page={p} count={count} />
+    </div>
   );
 };
 

@@ -41,6 +41,7 @@
 import { Webhook } from "svix";
 import { headers } from "next/headers";
 import prisma from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 
 /**
  * POST Handler for Webhook Requests

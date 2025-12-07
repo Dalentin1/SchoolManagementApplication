@@ -143,13 +143,6 @@ export async function POST(req: Request) {
       const email = email_addresses?.[0]?.email_address;
 
       // Only update if email changed
-      if (email) {
-        await prisma.user.update({
-          where: { id }, // Find by Clerk user ID
-          data: { email }, // Update email field
-        });
-        console.log(`User updated in database: ${email}`);
-      }
     }
 
     // =====================================================================
@@ -159,10 +152,6 @@ export async function POST(req: Request) {
     // What: Remove the User record from our database
     // Why: Clean up - user no longer has access to the app
     if (eventType === "user.deleted") {
-      await prisma.user.delete({
-        where: { id }, // Find by Clerk user ID
-      });
-      console.log(`User deleted from database: ${id}`);
     }
 
     // Success! Clerk will mark this webhook as delivered

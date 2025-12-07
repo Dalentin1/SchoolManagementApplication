@@ -130,15 +130,6 @@ export async function POST(req: Request) {
       // Create the user record in our database
       // Initially set role to "student" (admin can change this later)
       // Admin should update the role to "teacher", "admin", "parent" as needed
-      await prisma.user.create({
-        data: {
-          id, // Use Clerk's user ID as our primary key
-          email, // Store their email
-          role: "student", // Default role - admin assigns correct role
-        },
-      });
-
-      console.log(`User created in database: ${email}`);
     }
 
     // =====================================================================
